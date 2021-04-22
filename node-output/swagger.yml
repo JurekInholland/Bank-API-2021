@@ -39,10 +39,11 @@
           "400" : {
             "description" : "bad input parameter"
           }
-        }
-      }
-    },
-    "/accounts/" : {
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
       "post" : {
         "tags" : [ "account" ],
         "summary" : "create an account",
@@ -68,7 +69,10 @@
           "400" : {
             "description" : "Invalid request, account not created"
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
     "/accounts/{iban}" : {
@@ -102,6 +106,40 @@
               }
             }
           }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "account" ],
+        "summary" : "update an account",
+        "description" : "updating an accouint using an iban",
+        "operationId" : "updateAccount",
+        "parameters" : [ {
+          "name" : "iban",
+          "in" : "path",
+          "description" : "The the iban of the account",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Account"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "account has been updated successfully"
+          }
         }
       },
       "delete" : {
@@ -124,7 +162,60 @@
           "200" : {
             "description" : "Account has been delete successfully"
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/accounts/{iban}/transactions" : {
+      "get" : {
+        "tags" : [ "account" ],
+        "summary" : "get all account transactions using IBAN",
+        "description" : "get all account specific transactions using an IBAN",
+        "operationId" : "getAccountTransactions",
+        "parameters" : [ {
+          "name" : "iban",
+          "in" : "path",
+          "description" : "The the iban of the account",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "iban",
+          "in" : "query",
+          "description" : "The account for the matching iban",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Account"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A JSON array of transactions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
     "/users" : {
@@ -133,6 +224,27 @@
         "summary" : "get users",
         "description" : "getting a list of users",
         "operationId" : "getUsers",
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The number of users to skip before starting the collection of users",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limiting the amount of users per request",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "A JSON array of users",
@@ -150,7 +262,7 @@
         }
       }
     },
-    "/users/" : {
+    "/users/register" : {
       "post" : {
         "tags" : [ "user" ],
         "summary" : "creating a user",
@@ -176,6 +288,50 @@
         }
       }
     },
+    "/users/login" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Login a user",
+        "description" : "User logins with an email and password",
+        "operationId" : "loginUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "You have successfully logged in",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect email/password"
+          }
+        }
+      }
+    },
+    "/users/logout" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Logs out the user",
+        "operationId" : "logoutUser",
+        "responses" : {
+          "default" : {
+            "description" : "User has been logged out"
+          }
+        }
+      }
+    },
     "/users/{userid}" : {
       "get" : {
         "tags" : [ "user" ],
@@ -190,6 +346,7 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
+            "minimum" : 1,
             "type" : "integer"
           }
         } ],
@@ -222,6 +379,7 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
+            "minimum" : 1,
             "type" : "integer"
           }
         } ],
@@ -253,12 +411,159 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
+            "minimum" : 1,
             "type" : "integer"
           }
         } ],
         "responses" : {
           "200" : {
             "description" : "user has been deleted successfully"
+          }
+        }
+      }
+    },
+    "/transactions" : {
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "make a transaction",
+        "description" : "User transfers to another account",
+        "operationId" : "transactionid",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "You have successfully made a transaction"
+          },
+          "400" : {
+            "description" : "Something went wrong"
+          }
+        }
+      }
+    },
+    "/transactions/deposit" : {
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "make a deposit",
+        "description" : "User deposits to their own account",
+        "operationId" : "depositid",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "You have successfully deposited to you account"
+          },
+          "400" : {
+            "description" : "Something went wrong"
+          }
+        }
+      }
+    },
+    "/transactions/withdraw" : {
+      "post" : {
+        "tags" : [ "transaction" ],
+        "summary" : "withdraw from account",
+        "description" : "user withdraws from own account",
+        "operationId" : "withdrawid",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_2"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "You have successfully withdrawn from you account"
+          },
+          "400" : {
+            "description" : "Something went wrong"
+          }
+        }
+      }
+    },
+    "/transactions/{userid}" : {
+      "get" : {
+        "tags" : [ "transaction" ],
+        "summary" : "get transactions for specific user",
+        "description" : "getting a list of transactions",
+        "operationId" : "getTransactionsOfUser",
+        "parameters" : [ {
+          "name" : "userid",
+          "in" : "path",
+          "description" : "All transactions of the user",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A JSON array of transactions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transaction/{transactionid}" : {
+      "get" : {
+        "tags" : [ "transaction" ],
+        "summary" : "get a transaction using transaction ID",
+        "description" : "get a specific transaction using an ID",
+        "operationId" : "getTransaction",
+        "parameters" : [ {
+          "name" : "transactionid",
+          "in" : "path",
+          "description" : "The transactionid of the transaction",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A json transaction object",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -345,6 +650,55 @@
       "AccountType" : {
         "type" : "string",
         "enum" : [ "current", "savings" ]
+      },
+      "body" : {
+        "type" : "object",
+        "properties" : {
+          "email_address" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "authtoken" : {
+            "type" : "string",
+            "description" : "auth token"
+          }
+        }
+      },
+      "body_1" : {
+        "type" : "object",
+        "properties" : {
+          "amount_deposit" : {
+            "type" : "integer"
+          },
+          "account_type" : {
+            "type" : "string"
+          }
+        }
+      },
+      "body_2" : {
+        "type" : "object",
+        "properties" : {
+          "amount_withdraw" : {
+            "type" : "integer"
+          },
+          "account_type" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
       }
     }
   }
