@@ -311,7 +311,10 @@
           "default" : {
             "description" : "User has been logged out"
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
     "/users/{userid}" : {
@@ -376,7 +379,10 @@
           "200" : {
             "description" : "user has been updated successfully"
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "user" ],
@@ -398,7 +404,10 @@
           "200" : {
             "description" : "user has been deleted successfully"
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       }
     },
     "/transactions" : {
@@ -570,7 +579,7 @@
         }
       },
       "User" : {
-        "required" : [ "emailAddress", "firstName", "id", "lastName", "password", "phoneNumber", "role" ],
+        "required" : [ "account", "emailAddress", "firstName", "id", "lastName", "password", "phoneNumber", "role" ],
         "type" : "object",
         "properties" : {
           "id" : {
@@ -646,7 +655,7 @@
         "properties" : {
           "authtoken" : {
             "type" : "string",
-            "description" : "auth token"
+            "example" : "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51"
           }
         }
       },
