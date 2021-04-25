@@ -140,7 +140,10 @@
           "200" : {
             "description" : "account has been updated successfully"
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "account" ],
@@ -224,27 +227,6 @@
         "summary" : "get users",
         "description" : "getting a list of users",
         "operationId" : "getUsers",
-        "parameters" : [ {
-          "name" : "offset",
-          "in" : "query",
-          "description" : "The number of users to skip before starting the collection of users",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "Limiting the amount of users per request",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
         "responses" : {
           "200" : {
             "description" : "A JSON array of users",
@@ -346,7 +328,6 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "minimum" : 1,
             "type" : "integer"
           }
         } ],
@@ -379,7 +360,6 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "minimum" : 1,
             "type" : "integer"
           }
         } ],
@@ -411,7 +391,6 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "minimum" : 1,
             "type" : "integer"
           }
         } ],
