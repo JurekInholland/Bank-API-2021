@@ -15,6 +15,9 @@
   }, {
     "url" : "https://petstore.swagger.io/v2"
   } ],
+  "security" : [ {
+    "bearerAuth" : [ ]
+  } ],
   "paths" : {
     "/login" : {
       "post" : {
@@ -45,14 +48,15 @@
           "400" : {
             "description" : "Incorrect email/password"
           }
-        }
+        },
+        "security" : [ ]
       }
     },
     "/accounts" : {
       "get" : {
         "tags" : [ "account" ],
         "summary" : "get accounts",
-        "description" : "getting a list of accounts",
+        "description" : "getting a list of accounts | User access; Customer (can only get their own account) & Employee",
         "operationId" : "getAccounts",
         "responses" : {
           "200" : {
@@ -79,7 +83,7 @@
       "post" : {
         "tags" : [ "account" ],
         "summary" : "create an account",
-        "description" : "creating an account",
+        "description" : "creating an account | User access; Customer & Employee",
         "operationId" : "createAccount",
         "requestBody" : {
           "content" : {
@@ -111,7 +115,7 @@
       "get" : {
         "tags" : [ "account" ],
         "summary" : "get an account using IBAN",
-        "description" : "get a specific account using an IBAN",
+        "description" : "get a specific account using an IBAN | User access; Customer (can only get their own account) & Employee",
         "operationId" : "getAccount",
         "parameters" : [ {
           "name" : "iban",
@@ -146,7 +150,7 @@
       "put" : {
         "tags" : [ "account" ],
         "summary" : "update an account",
-        "description" : "updating an accouint using an iban",
+        "description" : "updating an accouint using an iban | User access; Customer (can only update their own account) & Employee",
         "operationId" : "updateAccount",
         "parameters" : [ {
           "name" : "iban",
@@ -180,7 +184,7 @@
       "delete" : {
         "tags" : [ "account" ],
         "summary" : "Close an account",
-        "description" : "Closing an account using an iban",
+        "description" : "Closing an account using an iban | User access; Employee",
         "operationId" : "deleteAccount",
         "parameters" : [ {
           "name" : "iban",
@@ -207,7 +211,7 @@
       "get" : {
         "tags" : [ "account" ],
         "summary" : "get all account transactions using IBAN",
-        "description" : "get all account specific transactions using an IBAN",
+        "description" : "get all account specific transactions using an IBAN | User access; Customer (can only get their own account transactions) & Employee",
         "operationId" : "getAccountTransactions",
         "parameters" : [ {
           "name" : "iban",
@@ -257,7 +261,7 @@
       "get" : {
         "tags" : [ "user" ],
         "summary" : "get users",
-        "description" : "getting a list of users",
+        "description" : "getting a list of users | User access; Customer (can only get their own user details) & Employee",
         "operationId" : "getUsers",
         "responses" : {
           "200" : {
@@ -280,7 +284,7 @@
       "post" : {
         "tags" : [ "user" ],
         "summary" : "creating a user",
-        "description" : "creating a user",
+        "description" : "creating a user | User access; Employee",
         "operationId" : "createUser",
         "requestBody" : {
           "content" : {
@@ -306,6 +310,7 @@
       "post" : {
         "tags" : [ "user" ],
         "summary" : "Logs out the user",
+        "description" : "Logs out the current user in session | User access; Customer & Employee",
         "operationId" : "logoutUser",
         "responses" : {
           "default" : {
@@ -321,7 +326,7 @@
       "get" : {
         "tags" : [ "user" ],
         "summary" : "get a user using user ID",
-        "description" : "get a specific user using an ID",
+        "description" : "get a specific user using an ID | User access; Customer (can only get their user details) & Employee",
         "operationId" : "getUser",
         "parameters" : [ {
           "name" : "userid",
@@ -353,7 +358,7 @@
       "put" : {
         "tags" : [ "user" ],
         "summary" : "update a user",
-        "description" : "updating a user using a userid",
+        "description" : "updating a user using a userid | User access; Customer(can only update their own user details) & Employee",
         "operationId" : "updateUser",
         "parameters" : [ {
           "name" : "userid",
@@ -387,7 +392,7 @@
       "delete" : {
         "tags" : [ "user" ],
         "summary" : "delete a user",
-        "description" : "deleting a user using the userid",
+        "description" : "deleting a user using the userid | User access; Employee",
         "operationId" : "deleteUser",
         "parameters" : [ {
           "name" : "userid",
@@ -414,7 +419,7 @@
       "post" : {
         "tags" : [ "transaction" ],
         "summary" : "make a transaction",
-        "description" : "User transfers to another account",
+        "description" : "User transfers to another account | User access; Customer & Employee",
         "operationId" : "transactionid",
         "requestBody" : {
           "content" : {
@@ -440,7 +445,7 @@
       "post" : {
         "tags" : [ "transaction" ],
         "summary" : "make a deposit",
-        "description" : "User deposits to their own account",
+        "description" : "User deposits to their own account | User access; Customer & Employee",
         "operationId" : "depositid",
         "requestBody" : {
           "content" : {
@@ -466,7 +471,7 @@
       "post" : {
         "tags" : [ "transaction" ],
         "summary" : "withdraw from account",
-        "description" : "user withdraws from own account",
+        "description" : "user withdraws from own account | User access; Customer & Employee",
         "operationId" : "withdrawid",
         "requestBody" : {
           "content" : {
@@ -492,7 +497,7 @@
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "get transactions for specific user",
-        "description" : "getting a list of transactions",
+        "description" : "getting a list of transactions | User access; Customer (can only get their own transactions) & Employee",
         "operationId" : "getTransactionsOfUser",
         "parameters" : [ {
           "name" : "userid",
@@ -526,7 +531,7 @@
       "get" : {
         "tags" : [ "transaction" ],
         "summary" : "get a transaction using transaction ID",
-        "description" : "get a specific transaction using an ID",
+        "description" : "get a specific transaction using an ID | User access; Customer (can only get their own transactions) & Employee",
         "operationId" : "getTransaction",
         "parameters" : [ {
           "name" : "transactionid",
