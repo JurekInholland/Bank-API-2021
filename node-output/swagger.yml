@@ -16,6 +16,38 @@
     "url" : "https://petstore.swagger.io/v2"
   } ],
   "paths" : {
+    "/login" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Login a user",
+        "description" : "User logins with an email and password",
+        "operationId" : "loginUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "You have successfully logged in",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect email/password"
+          }
+        }
+      }
+    },
     "/accounts" : {
       "get" : {
         "tags" : [ "account" ],
@@ -266,38 +298,6 @@
           },
           "400" : {
             "description" : "Invalid request, user not created"
-          }
-        }
-      }
-    },
-    "/users/login" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "Login a user",
-        "description" : "User logins with an email and password",
-        "operationId" : "loginUser",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/body"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "You have successfully logged in",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "Incorrect email/password"
           }
         }
       }
