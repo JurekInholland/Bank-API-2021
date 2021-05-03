@@ -500,10 +500,7 @@
               }
             }
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       },
       "post" : {
         "tags" : [ "employees", "customers" ],
@@ -563,10 +560,7 @@
               }
             }
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       },
       "put" : {
         "tags" : [ "employees" ],
@@ -601,10 +595,7 @@
           "400" : {
             "description" : "Updating transaction failed"
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       },
       "delete" : {
         "tags" : [ "employees" ],
@@ -628,10 +619,7 @@
           "400" : {
             "description" : "deleting transaction failed"
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       }
     }
   },
