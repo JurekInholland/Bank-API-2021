@@ -96,10 +96,7 @@
           "400" : {
             "description" : "bad input parameter"
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       },
       "post" : {
         "tags" : [ "account" ],
@@ -126,10 +123,7 @@
           "400" : {
             "description" : "Invalid request, account not created"
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       }
     },
     "/accounts/{iban}" : {
@@ -163,10 +157,7 @@
               }
             }
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       },
       "put" : {
         "tags" : [ "account" ],
@@ -197,10 +188,7 @@
           "200" : {
             "description" : "account has been updated successfully"
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       },
       "delete" : {
         "tags" : [ "account" ],
@@ -222,10 +210,7 @@
           "200" : {
             "description" : "Account has been delete successfully"
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       }
     },
     "/accounts/{iban}/transactions" : {
@@ -292,10 +277,7 @@
               }
             }
           }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        }
       }
     },
     "/users" : {
