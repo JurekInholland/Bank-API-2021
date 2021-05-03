@@ -52,9 +52,170 @@
         "security" : [ ]
       }
     },
+    "/users" : {
+      "get" : {
+        "tags" : [ "employees", "customers" ],
+        "summary" : "get users",
+        "description" : "getting a list of users | User access; Customer (can only get their own user details) & Employee",
+        "operationId" : "getUsers",
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The number of items to skip before starting to collect the result set",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The numbers of items to return",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A JSON array of users",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "employees" ],
+        "summary" : "creating a user",
+        "description" : "creating a user | User access; Employee",
+        "operationId" : "createUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Created a user"
+          },
+          "400" : {
+            "description" : "Invalid request, user not created"
+          }
+        }
+      }
+    },
+    "/users/{userid}" : {
+      "get" : {
+        "tags" : [ "employees", "customers" ],
+        "summary" : "get a user using user ID",
+        "description" : "get a specific user using an ID | User access; Customer (can only get their user details) & Employee",
+        "operationId" : "getUser",
+        "parameters" : [ {
+          "name" : "userid",
+          "in" : "path",
+          "description" : "The userid of the user",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A json account object",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "employees" ],
+        "summary" : "update a user",
+        "description" : "updating a user using a userid | User access; Customer(can only update their own user details) & Employee",
+        "operationId" : "updateUser",
+        "parameters" : [ {
+          "name" : "userid",
+          "in" : "path",
+          "description" : "The userid for the user to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "user has been updated successfully"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "employees" ],
+        "summary" : "delete a user",
+        "description" : "deleting a user using the userid | User access; Employee",
+        "operationId" : "deleteUser",
+        "parameters" : [ {
+          "name" : "userid",
+          "in" : "path",
+          "description" : "The userid for the user to delete",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "user has been deleted successfully"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
     "/accounts" : {
       "get" : {
-        "tags" : [ "account" ],
+        "tags" : [ "employees", "customers" ],
         "summary" : "get accounts",
         "description" : "getting a list of accounts | User access; Customer (can only get their own account) & Employee",
         "operationId" : "getAccounts",
@@ -99,7 +260,7 @@
         }
       },
       "post" : {
-        "tags" : [ "account" ],
+        "tags" : [ "employees", "customers" ],
         "summary" : "create an account",
         "description" : "creating an account | User access; Customer & Employee",
         "operationId" : "createAccount",
@@ -128,7 +289,7 @@
     },
     "/accounts/{iban}" : {
       "get" : {
-        "tags" : [ "account" ],
+        "tags" : [ "employees", "customers" ],
         "summary" : "get an account using IBAN",
         "description" : "get a specific account using an IBAN | User access; Customer (can only get their own account) & Employee",
         "operationId" : "getAccount",
@@ -160,7 +321,7 @@
         }
       },
       "put" : {
-        "tags" : [ "account" ],
+        "tags" : [ "employees", "customers" ],
         "summary" : "update an account",
         "description" : "updating an accouint using an iban | User access; Customer (can only update their own account) & Employee",
         "operationId" : "updateAccount",
@@ -191,7 +352,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "account" ],
+        "tags" : [ "employees" ],
         "summary" : "Close an account",
         "description" : "Closing an account using an iban | User access; Employee",
         "operationId" : "deleteAccount",
@@ -211,252 +372,6 @@
             "description" : "Account has been delete successfully"
           }
         }
-      }
-    },
-    "/accounts/{iban}/transactions" : {
-      "get" : {
-        "tags" : [ "account" ],
-        "summary" : "get all account transactions using IBAN",
-        "description" : "get all account specific transactions using an IBAN | User access; Customer (can only get their own account transactions) & Employee",
-        "operationId" : "getAccountTransactions",
-        "parameters" : [ {
-          "name" : "iban",
-          "in" : "path",
-          "description" : "The the iban of the account",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "iban",
-          "in" : "query",
-          "description" : "The account for the matching iban",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Account"
-            }
-          }
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "description" : "The number of items to skip before starting to collect the result set",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "The numbers of items to return",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "A JSON array of transactions",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Transaction"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "summary" : "get users",
-        "description" : "getting a list of users | User access; Customer (can only get their own user details) & Employee",
-        "operationId" : "getUsers",
-        "parameters" : [ {
-          "name" : "offset",
-          "in" : "query",
-          "description" : "The number of items to skip before starting to collect the result set",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "The numbers of items to return",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "A JSON array of users",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/register" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "creating a user",
-        "description" : "creating a user | User access; Employee",
-        "operationId" : "createUser",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/User"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Created a user"
-          },
-          "400" : {
-            "description" : "Invalid request, user not created"
-          }
-        }
-      }
-    },
-    "/users/logout" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "Logs out the user",
-        "description" : "Logs out the current user in session | User access; Customer & Employee",
-        "operationId" : "logoutUser",
-        "responses" : {
-          "default" : {
-            "description" : "User has been logged out"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      }
-    },
-    "/users/{userid}" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "summary" : "get a user using user ID",
-        "description" : "get a specific user using an ID | User access; Customer (can only get their user details) & Employee",
-        "operationId" : "getUser",
-        "parameters" : [ {
-          "name" : "userid",
-          "in" : "path",
-          "description" : "The userid of the user",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "A json account object",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "user" ],
-        "summary" : "update a user",
-        "description" : "updating a user using a userid | User access; Customer(can only update their own user details) & Employee",
-        "operationId" : "updateUser",
-        "parameters" : [ {
-          "name" : "userid",
-          "in" : "path",
-          "description" : "The userid for the user to update",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "user has been updated successfully"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      },
-      "delete" : {
-        "tags" : [ "user" ],
-        "summary" : "delete a user",
-        "description" : "deleting a user using the userid | User access; Employee",
-        "operationId" : "deleteUser",
-        "parameters" : [ {
-          "name" : "userid",
-          "in" : "path",
-          "description" : "The userid for the user to delete",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "user has been deleted successfully"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
       }
     },
     "/transactions" : {
