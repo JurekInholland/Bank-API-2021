@@ -461,8 +461,8 @@
     },
     "/transactions" : {
       "get" : {
-        "tags" : [ "transaction" ],
-        "summary" : "get transactions",
+        "tags" : [ "employees", "customers" ],
+        "summary" : "List transactions",
         "description" : "getting a list of transactions",
         "operationId" : "getTransactions",
         "parameters" : [ {
@@ -506,158 +506,42 @@
         } ]
       },
       "post" : {
-        "tags" : [ "transaction" ],
-        "summary" : "make a transaction",
-        "description" : "User transfers to another account | User access; Customer & Employee",
-        "operationId" : "transactionid",
+        "tags" : [ "employees", "customers" ],
+        "summary" : "Create a transaction",
+        "description" : "creating a transaction",
+        "operationId" : "createTransaction",
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Transaction"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful transaction"
-          },
-          "400" : {
-            "description" : "Something went wrong"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      }
-    },
-    "/transactions/deposit" : {
-      "post" : {
-        "tags" : [ "transaction" ],
-        "summary" : "make a deposit",
-        "description" : "User deposits to their own account | User access; Customer & Employee",
-        "operationId" : "depositid",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/body_1"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful deposit"
-          },
-          "400" : {
-            "description" : "Something went wrong"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      }
-    },
-    "/transactions/withdraw" : {
-      "post" : {
-        "tags" : [ "transaction" ],
-        "summary" : "withdraw from account",
-        "description" : "user withdraws from own account | User access; Customer & Employee",
-        "operationId" : "withdrawid",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/body_2"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "successful withdrawn"
-          },
-          "400" : {
-            "description" : "Something went wrong"
-          }
-        },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
-      }
-    },
-    "/transactions/{userid}" : {
-      "get" : {
-        "tags" : [ "transaction" ],
-        "summary" : "get transactions for specific user",
-        "description" : "getting a list of transactions | User access; Customer (can only get their own transactions) & Employee",
-        "operationId" : "getTransactionsOfUser",
-        "parameters" : [ {
-          "name" : "userid",
-          "in" : "path",
-          "description" : "All transactions of the user",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "integer"
-          }
-        }, {
-          "name" : "offset",
-          "in" : "query",
-          "description" : "The number of items to skip before starting to collect the result set",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        }, {
-          "name" : "limit",
-          "in" : "query",
-          "description" : "The numbers of items to return",
-          "required" : false,
-          "style" : "form",
-          "explode" : true,
-          "schema" : {
-            "type" : "integer"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "A JSON array of transactions",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Transaction"
-                  }
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/Transaction"
                 }
               }
             }
-          }
+          },
+          "required" : true
         },
-        "security" : [ {
-          "bearerAuth" : [ ]
-        } ]
+        "responses" : {
+          "200" : {
+            "description" : "Transaction created successfully"
+          },
+          "400" : {
+            "description" : "Invalid request, transaction not created"
+          }
+        }
       }
     },
-    "/transactions/{transactionid}" : {
+    "/transactions/{transactionId}" : {
       "get" : {
-        "tags" : [ "transaction" ],
-        "summary" : "get a specific transaction",
+        "tags" : [ "employees", "customers" ],
+        "summary" : "Get a specific transaction",
         "description" : "get a specific transaction | User access; Customer (can only get their own transactions) & Employee",
-        "operationId" : "getTransaction",
         "parameters" : [ {
-          "name" : "transactionid",
+          "name" : "transactionId",
           "in" : "path",
-          "description" : "The transactionid of the transaction",
+          "description" : "The transactionId of the transaction",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -678,6 +562,71 @@
                 }
               }
             }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "employees" ],
+        "summary" : "Update a transaction",
+        "description" : "Update a single transaction via transactionId",
+        "operationId" : "transactionId",
+        "parameters" : [ {
+          "name" : "transactionId",
+          "in" : "path",
+          "description" : "The transactionId of the transaction",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successfully updated transaction"
+          },
+          "400" : {
+            "description" : "Updating transaction failed"
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "employees" ],
+        "summary" : "Delete a transaction",
+        "description" : "Delete a single transaction via transactionId",
+        "parameters" : [ {
+          "name" : "transactionId",
+          "in" : "path",
+          "description" : "The transactionId of the transaction",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully deleted transaction"
+          },
+          "400" : {
+            "description" : "deleting transaction failed"
           }
         },
         "security" : [ {
@@ -789,17 +738,6 @@
         }
       },
       "body_1" : {
-        "type" : "object",
-        "properties" : {
-          "amount_deposit" : {
-            "type" : "integer"
-          },
-          "account_type" : {
-            "type" : "string"
-          }
-        }
-      },
-      "body_2" : {
         "type" : "object",
         "properties" : {
           "amount_withdraw" : {
