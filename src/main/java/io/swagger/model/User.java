@@ -6,71 +6,50 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-/**
- * User
- */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@Entity
+@SequenceGenerator(name = "user_seq", initialValue = 1000001)
+public class User
+{
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+  private long id;
 
+  private String firstName;
+  private String lastName;
+  private String phoneNumber;
+  private String emailAddress;
+  private String password;
+  private Role role;
 
-public class User   {
-  @JsonProperty("id")
-  private Integer id = null;
-
-  @JsonProperty("firstName")
-  private String firstName = null;
-
-  @JsonProperty("lastName")
-  private String lastName = null;
-
-  @JsonProperty("phoneNumber")
-  private Integer phoneNumber = null;
-
-  @JsonProperty("emailAddress")
-  private String emailAddress = null;
-
-  @JsonProperty("password")
-  private String password = null;
-
-  @JsonProperty("role")
-  private Role role = null;
-
-  public User id(Integer id) {
-    this.id = id;
-    return this;
+  public User() {
   }
 
-  /**
-   * Get id
-   * @return id
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role)
+  {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phoneNumber = phoneNumber;
+    this.emailAddress = emailAddress;
+    this.password = password;
+    this.role = role;
+  }
 
-    public Integer getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(long id) {
     this.id = id;
   }
 
-  public User firstName(String firstName) {
-    this.firstName = firstName;
-    return this;
-  }
-
-  /**
-   * Get firstName
-   * @return firstName
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getFirstName() {
+  public String getFirstName() {
     return firstName;
   }
 
@@ -78,19 +57,7 @@ public class User   {
     this.firstName = firstName;
   }
 
-  public User lastName(String lastName) {
-    this.lastName = lastName;
-    return this;
-  }
-
-  /**
-   * Get lastName
-   * @return lastName
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getLastName() {
+  public String getLastName() {
     return lastName;
   }
 
@@ -98,39 +65,15 @@ public class User   {
     this.lastName = lastName;
   }
 
-  public User phoneNumber(Integer phoneNumber) {
-    this.phoneNumber = phoneNumber;
-    return this;
-  }
-
-  /**
-   * Get phoneNumber
-   * @return phoneNumber
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public Integer getPhoneNumber() {
+  public String getPhoneNumber() {
     return phoneNumber;
   }
 
-  public void setPhoneNumber(Integer phoneNumber) {
+  public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
-  public User emailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
-    return this;
-  }
-
-  /**
-   * Get emailAddress
-   * @return emailAddress
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getEmailAddress() {
+  public String getEmailAddress() {
     return emailAddress;
   }
 
@@ -138,19 +81,7 @@ public class User   {
     this.emailAddress = emailAddress;
   }
 
-  public User password(String password) {
-    this.password = password;
-    return this;
-  }
-
-  /**
-   * Get password
-   * @return password
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public String getPassword() {
+  public String getPassword() {
     return password;
   }
 
@@ -158,20 +89,7 @@ public class User   {
     this.password = password;
   }
 
-  public User role(Role role) {
-    this.role = role;
-    return this;
-  }
-
-  /**
-   * Get role
-   * @return role
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public Role getRole() {
+  public Role getRole() {
     return role;
   }
 
@@ -179,54 +97,17 @@ public class User   {
     this.role = role;
   }
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.firstName, user.firstName) &&
-        Objects.equals(this.lastName, user.lastName) &&
-        Objects.equals(this.phoneNumber, user.phoneNumber) &&
-        Objects.equals(this.emailAddress, user.emailAddress) &&
-        Objects.equals(this.password, user.password) &&
-        Objects.equals(this.role, user.role);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, firstName, lastName, phoneNumber, emailAddress, password, role);
-  }
-
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
-    sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
-    sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
-    sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
-    sb.append("    role: ").append(toIndentedString(role)).append("\n");
-    sb.append("}");
+    final StringBuffer sb = new StringBuffer("User{");
+    sb.append("id=").append(id);
+    sb.append(", firstName='").append(firstName).append('\'');
+    sb.append(", lastName='").append(lastName).append('\'');
+    sb.append(", phoneNumber=").append(phoneNumber);
+    sb.append(", emailAddress='").append(emailAddress).append('\'');
+    sb.append(", password='").append(password).append('\'');
+    sb.append(", role=").append(role);
+    sb.append('}');
     return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
   }
 }
