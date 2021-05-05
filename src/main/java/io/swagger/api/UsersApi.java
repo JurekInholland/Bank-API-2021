@@ -65,7 +65,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users/{userid}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<User>> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid);
+    ResponseEntity<User> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid);
 
 
     @Operation(summary = "get users", description = "getting a list of users | User access; Customer (can only get their own user details) & Employee", security = {

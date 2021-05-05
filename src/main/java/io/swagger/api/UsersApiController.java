@@ -25,6 +25,8 @@ public class UsersApiController implements UsersApi {
 
     @Autowired
     private UserService userService;
+
+
     private static final Logger log = LoggerFactory.getLogger(UsersApiController.class);
 
     private final ObjectMapper objectMapper;
@@ -47,18 +49,10 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<User>> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<User>>(objectMapper.readValue("[ {\n  \"firstName\" : \"firstName\",\n  \"lastName\" : \"lastName\",\n  \"emailAddress\" : \"\",\n  \"password\" : \"\",\n  \"phoneNumber\" : 6,\n  \"role\" : \"customer\",\n  \"id\" : 0\n}, {\n  \"firstName\" : \"firstName\",\n  \"lastName\" : \"lastName\",\n  \"emailAddress\" : \"\",\n  \"password\" : \"\",\n  \"phoneNumber\" : 6,\n  \"role\" : \"customer\",\n  \"id\" : 0\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<List<User>>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<User> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid)
+    {
+        User user = userService.getUserById(userid);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit)
