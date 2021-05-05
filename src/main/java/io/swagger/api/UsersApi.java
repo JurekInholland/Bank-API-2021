@@ -46,7 +46,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody User body);
+    ResponseEntity createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody User body);
 
 
     @Operation(summary = "delete a user", description = "deleting a user using the userid | User access; Employee", security = {
