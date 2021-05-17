@@ -37,6 +37,7 @@ public class AccountsApiController implements AccountsApi {
 
     public ResponseEntity<Void> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody List<Account> body) {
         String accept = request.getHeader("Accept");
+
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
