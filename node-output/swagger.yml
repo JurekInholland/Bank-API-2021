@@ -154,7 +154,7 @@
         }
       },
       "put" : {
-        "tags" : [ "employees" ],
+        "tags" : [ "employees", "customers" ],
         "summary" : "update a user",
         "description" : "updating a user using a userid | User access; Customer(can only update their own user details) & Employee",
         "operationId" : "updateUser",
@@ -552,7 +552,7 @@
             "$ref" : "#/components/schemas/User"
           },
           "balance" : {
-            "type" : "integer"
+            "type" : "number"
           },
           "accountType" : {
             "$ref" : "#/components/schemas/AccountType"
@@ -573,7 +573,7 @@
             "type" : "string"
           },
           "phoneNumber" : {
-            "type" : "integer"
+            "type" : "string"
           },
           "emailAddress" : {
             "type" : "string",
