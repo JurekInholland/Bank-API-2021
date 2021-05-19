@@ -1,8 +1,8 @@
 package io.swagger.configuration;
 
-import io.swagger.model.Role;
-import io.swagger.model.User;
+import io.swagger.model.*;
 import io.swagger.repository.UserRepository;
+import io.swagger.service.AccountService;
 import io.swagger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -12,16 +12,19 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class BankApiApplicationRunner implements ApplicationRunner
 {
     @Autowired
     private UserService userService;
+    private AccountService accountservice;
 
     @Override
     public void run(ApplicationArguments args) throws Exception
     {
+        // Seed database users
         List<User> users = Arrays.asList
         (
             new User("Brad","Gibson","0119627516","brad.gibson@example.com","firewall", Role.CUSTOMER),
@@ -37,5 +40,29 @@ public class BankApiApplicationRunner implements ApplicationRunner
         );
         users.forEach(user -> userService.addUser(user));
 
+        // Seed accounts
+        List<Account> accountList = new ArrayList<Account>();
+        for (User user : users) {
+
+            // Generate between 1-4 accounts per User
+            Random rand = new Random();
+            Integer low = 1;
+            Integer high = 5;
+            Integer numOfAccounts = rand.nextInt(high-low) + low;
+
+            for (Integer i = 0; i < numOfAccounts; i++) {
+                // Random amount between 10-3000
+                low = 10;
+                high = 3000;
+                Integer accountBalance = rand.nextInt(high-low) + low;
+
+                // Add IBAN and User to account
+                Iban iban = new Iban();
+                accountList.add(
+                    new Account(iban.generateUniqueIban(), user, accountBalance, AccountType.CURRENT)
+                );
+            }
+        }
+        accountservice.addAccount(accountList);
     }
 }

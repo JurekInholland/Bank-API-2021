@@ -20,7 +20,7 @@ import javax.validation.constraints.*;
 
 public class Account   {
   @JsonProperty("iban")
-  private UUID iban = null;
+  private String iban = null;
 
   @JsonProperty("user")
   private User user = null;
@@ -31,9 +31,16 @@ public class Account   {
   @JsonProperty("accountType")
   private AccountType accountType = null;
 
-  public Account iban(UUID iban) {
+  // TODO: Make Model cleaner
+  public Account () {
+  }
+
+  public Account ( String iban, User user, Integer balance, AccountType accountType){
     this.iban = iban;
-    return this;
+    this.user = user;
+    this.balance = balance;
+    this.accountType = accountType;
+
   }
 
   /**
@@ -44,11 +51,11 @@ public class Account   {
       @NotNull
 
     @Valid
-    public UUID getIban() {
+    public String getIban() {
     return iban;
   }
 
-  public void setIban(UUID iban) {
+  public void setIban(String iban) {
     this.iban = iban;
   }
 
