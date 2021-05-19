@@ -29,7 +29,10 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body"
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/UserLogin"
+                }
               }
             }
           }
@@ -40,7 +43,10 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/LoginToken"
+                  }
                 }
               }
             }
@@ -428,7 +434,7 @@
               "schema" : {
                 "type" : "array",
                 "items" : {
-                  "$ref" : "#/components/schemas/body_1"
+                  "$ref" : "#/components/schemas/CreateTransaction"
                 }
               }
             }
@@ -499,7 +505,7 @@
               "schema" : {
                 "type" : "array",
                 "items" : {
-                  "$ref" : "#/components/schemas/body_2"
+                  "$ref" : "#/components/schemas/ModifyTransaction"
                 }
               }
             }
@@ -591,6 +597,26 @@
           }
         }
       },
+      "UserLogin" : {
+        "required" : [ "email_address", "password" ],
+        "properties" : {
+          "email_address" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "LoginToken" : {
+        "required" : [ "authtoken" ],
+        "properties" : {
+          "authtoken" : {
+            "type" : "string",
+            "example" : "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51"
+          }
+        }
+      },
       "Transaction" : {
         "required" : [ "accountFrom", "accountTo", "amount", "id", "timestamp", "userPerforming" ],
         "properties" : {
@@ -615,6 +641,44 @@
           }
         }
       },
+      "CreateTransaction" : {
+        "required" : [ "amount", "fromIban", "toIban" ],
+        "properties" : {
+          "fromIban" : {
+            "type" : "string"
+          },
+          "toIban" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "ModifyTransaction" : {
+        "required" : [ "id" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "fromIban" : {
+            "type" : "string"
+          },
+          "toIban" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "performingUserId" : {
+            "type" : "integer"
+          },
+          "timestamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
       "Role" : {
         "type" : "string",
         "enum" : [ "customer", "employee" ]
@@ -622,65 +686,6 @@
       "AccountType" : {
         "type" : "string",
         "enum" : [ "current", "savings" ]
-      },
-      "body" : {
-        "type" : "object",
-        "properties" : {
-          "email_address" : {
-            "type" : "string"
-          },
-          "password" : {
-            "type" : "string"
-          }
-        }
-      },
-      "inline_response_200" : {
-        "type" : "object",
-        "properties" : {
-          "authtoken" : {
-            "type" : "string",
-            "example" : "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51"
-          }
-        }
-      },
-      "body_1" : {
-        "properties" : {
-          "fromIban" : {
-            "type" : "string"
-          },
-          "toIban" : {
-            "type" : "string"
-          },
-          "amount" : {
-            "type" : "number"
-          }
-        }
-      },
-      "body_2" : {
-        "properties" : {
-          "transactionId" : {
-            "type" : "integer"
-          },
-          "amount" : {
-            "type" : "number"
-          },
-          "fromIban" : {
-            "type" : "string"
-          },
-          "toIban" : {
-            "type" : "string"
-          },
-          "timestamp" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "performingUserId" : {
-            "type" : "integer"
-          },
-          "accountType" : {
-            "$ref" : "#/components/schemas/AccountType"
-          }
-        }
       }
     },
     "securitySchemes" : {
