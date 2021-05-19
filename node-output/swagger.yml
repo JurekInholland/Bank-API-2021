@@ -428,7 +428,7 @@
               "schema" : {
                 "type" : "array",
                 "items" : {
-                  "$ref" : "#/components/schemas/Transaction"
+                  "$ref" : "#/components/schemas/body_1"
                 }
               }
             }
@@ -497,7 +497,10 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_1"
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/body_2"
+                }
               }
             }
           },
@@ -641,13 +644,41 @@
         }
       },
       "body_1" : {
-        "type" : "object",
         "properties" : {
-          "amount_withdraw" : {
+          "fromIban" : {
+            "type" : "string"
+          },
+          "toIban" : {
+            "type" : "string"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "body_2" : {
+        "properties" : {
+          "transactionId" : {
             "type" : "integer"
           },
-          "account_type" : {
+          "amount" : {
+            "type" : "number"
+          },
+          "fromIban" : {
             "type" : "string"
+          },
+          "toIban" : {
+            "type" : "string"
+          },
+          "timestamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "performingUserId" : {
+            "type" : "integer"
+          },
+          "accountType" : {
+            "$ref" : "#/components/schemas/AccountType"
           }
         }
       }
