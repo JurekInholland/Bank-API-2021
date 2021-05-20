@@ -596,6 +596,20 @@
           }
         }
       },
+      "PublicAccount" : {
+        "type" : "object",
+        "properties" : {
+          "iban" : {
+            "type" : "string"
+          },
+          "accountType" : {
+            "type" : "string"
+          },
+          "owner" : {
+            "$ref" : "#/components/schemas/PublicUser"
+          }
+        }
+      },
       "User" : {
         "required" : [ "emailAddress", "firstName", "id", "lastName", "password", "phoneNumber", "role" ],
         "type" : "object",
@@ -673,6 +687,17 @@
           }
         }
       },
+      "PublicUser" : {
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          }
+        }
+      },
       "UserLogin" : {
         "required" : [ "email_address", "password" ],
         "properties" : {
@@ -700,16 +725,16 @@
             "type" : "integer"
           },
           "accountFrom" : {
-            "$ref" : "#/components/schemas/Account"
+            "$ref" : "#/components/schemas/PublicAccount"
           },
           "accountTo" : {
-            "$ref" : "#/components/schemas/Account"
+            "$ref" : "#/components/schemas/PublicAccount"
           },
           "amount" : {
             "type" : "number"
           },
           "userPerforming" : {
-            "$ref" : "#/components/schemas/User"
+            "$ref" : "#/components/schemas/PublicUser"
           },
           "timestamp" : {
             "type" : "string",
