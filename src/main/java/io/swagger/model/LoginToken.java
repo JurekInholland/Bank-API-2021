@@ -9,17 +9,17 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * InlineResponse200
+ * LoginToken
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
 
 
-public class InlineResponse200   {
+public class LoginToken   {
   @JsonProperty("authtoken")
   private String authtoken = null;
 
-  public InlineResponse200 authtoken(String authtoken) {
+  public LoginToken authtoken(String authtoken) {
     this.authtoken = authtoken;
     return this;
   }
@@ -28,8 +28,9 @@ public class InlineResponse200   {
    * Get authtoken
    * @return authtoken
    **/
-  @Schema(example = "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51", description = "")
-  
+  @Schema(example = "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51", required = true, description = "")
+      @NotNull
+
     public String getAuthtoken() {
     return authtoken;
   }
@@ -47,8 +48,8 @@ public class InlineResponse200   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InlineResponse200 inlineResponse200 = (InlineResponse200) o;
-    return Objects.equals(this.authtoken, inlineResponse200.authtoken);
+    LoginToken loginToken = (LoginToken) o;
+    return Objects.equals(this.authtoken, loginToken.authtoken);
   }
 
   @Override
@@ -59,7 +60,7 @@ public class InlineResponse200   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InlineResponse200 {\n");
+    sb.append("class LoginToken {\n");
     
     sb.append("    authtoken: ").append(toIndentedString(authtoken)).append("\n");
     sb.append("}");

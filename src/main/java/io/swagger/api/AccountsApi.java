@@ -6,6 +6,8 @@
 package io.swagger.api;
 
 import io.swagger.model.Account;
+import io.swagger.model.CreateAccount;
+import io.swagger.model.ModifyAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -32,61 +34,69 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T15:39:24.948Z[GMT]")
 @Validated
 public interface AccountsApi {
 
     @Operation(summary = "create an account", description = "creating an account | User access; Customer & Employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Account created successfully"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid request, account not created") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Account created successfully", content = @Content(schema = @Schema(implementation = Account.class))),
+
+            @ApiResponse(responseCode = "400", description = "Invalid request, account not created") })
     @RequestMapping(value = "/accounts",
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Void> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody List<Account> body);
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.POST)
+    ResponseEntity<Account> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateAccount body);
 
 
     @Operation(summary = "Close an account", description = "Closing an account using an iban | User access; Employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Account has been delete successfully") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "account has been deleted successfully"),
+
+            @ApiResponse(responseCode = "400", description = "deleting account has failed") })
     @RequestMapping(value = "/accounts/{iban}",
-        method = RequestMethod.DELETE)
+            method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "The iban account to delete", required=true, schema=@Schema()) @PathVariable("iban") String iban);
 
 
     @Operation(summary = "get an account using IBAN", description = "get a specific account using an IBAN | User access; Customer (can only get their own account) & Employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A json account object", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Account.class)))) })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A json account object", content = @Content(schema = @Schema(implementation = Account.class))),
+
+            @ApiResponse(responseCode = "400", description = "account not found") })
     @RequestMapping(value = "/accounts/{iban}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Account>> getAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban);
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<Account> getAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban);
 
 
     @Operation(summary = "get accounts", description = "getting a list of accounts | User access; Customer (can only get their own account) & Employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A JSON array of accounts", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Account.class)))),
-        
-        @ApiResponse(responseCode = "400", description = "bad input parameter") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A JSON array of accounts", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Account.class)))),
+
+            @ApiResponse(responseCode = "400", description = "bad input parameter") })
     @RequestMapping(value = "/accounts",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+            produces = { "application/json" },
+            method = RequestMethod.GET)
     ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
 
 
     @Operation(summary = "update an account", description = "updating an accouint using an iban | User access; Customer (can only update their own account) & Employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "account has been updated successfully") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "account has been updated successfully", content = @Content(schema = @Schema(implementation = Account.class))),
+
+            @ApiResponse(responseCode = "400", description = "modifying account has failed") })
     @RequestMapping(value = "/accounts/{iban}",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Account body);
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyAccount body);
 
 }
 

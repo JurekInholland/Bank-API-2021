@@ -9,20 +9,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Body
+ * UserLogin
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
 
 
-public class Body   {
+public class UserLogin   {
   @JsonProperty("email_address")
   private String emailAddress = null;
 
   @JsonProperty("password")
   private String password = null;
 
-  public Body emailAddress(String emailAddress) {
+  public UserLogin emailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
     return this;
   }
@@ -31,8 +31,9 @@ public class Body   {
    * Get emailAddress
    * @return emailAddress
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     public String getEmailAddress() {
     return emailAddress;
   }
@@ -41,7 +42,7 @@ public class Body   {
     this.emailAddress = emailAddress;
   }
 
-  public Body password(String password) {
+  public UserLogin password(String password) {
     this.password = password;
     return this;
   }
@@ -50,8 +51,9 @@ public class Body   {
    * Get password
    * @return password
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     public String getPassword() {
     return password;
   }
@@ -69,9 +71,9 @@ public class Body   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Body body = (Body) o;
-    return Objects.equals(this.emailAddress, body.emailAddress) &&
-        Objects.equals(this.password, body.password);
+    UserLogin userLogin = (UserLogin) o;
+    return Objects.equals(this.emailAddress, userLogin.emailAddress) &&
+        Objects.equals(this.password, userLogin.password);
   }
 
   @Override
@@ -82,7 +84,7 @@ public class Body   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Body {\n");
+    sb.append("class UserLogin {\n");
     
     sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");

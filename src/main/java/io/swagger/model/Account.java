@@ -6,9 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AccountType;
 import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
+import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -20,7 +19,7 @@ import javax.validation.constraints.*;
  */
 @Validated
 @Entity
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T14:30:32.476Z[GMT]")
 
 
 public class Account   {
@@ -28,37 +27,38 @@ public class Account   {
   @JsonProperty("iban")
   private String iban = null;
 
-
   @OneToOne
   @JsonProperty("user")
   private User user = null;
 
   @JsonProperty("balance")
-  private Integer balance = null;
+  private BigDecimal balance = null;
 
   @JsonProperty("accountType")
   private AccountType accountType = null;
 
+  public Account iban(String iban) {
+    this.iban = iban;
+    return this;
+  }
   // TODO: Make Model cleaner
   public Account () {
   }
 
-  public Account ( String iban, User user, Integer balance, AccountType accountType){
+  public Account ( String iban, User user, BigDecimal balance, AccountType accountType){
     this.iban = iban;
     this.user = user;
     this.balance = balance;
     this.accountType = accountType;
 
   }
-
   /**
    * Get iban
    * @return iban
    **/
-  @Schema(required = true, description = "")
+  @Schema(example = "NLxxINHO0xxxxxxxxx", required = true, description = "")
       @NotNull
 
-    @Valid
     public String getIban() {
     return iban;
   }
@@ -88,7 +88,7 @@ public class Account   {
     this.user = user;
   }
 
-  public Account balance(Integer balance) {
+  public Account balance(BigDecimal balance) {
     this.balance = balance;
     return this;
   }
@@ -100,11 +100,12 @@ public class Account   {
   @Schema(required = true, description = "")
       @NotNull
 
-    public Integer getBalance() {
+    @Valid
+    public BigDecimal getBalance() {
     return balance;
   }
 
-  public void setBalance(Integer balance) {
+  public void setBalance(BigDecimal balance) {
     this.balance = balance;
   }
 

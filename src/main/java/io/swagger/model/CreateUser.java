@@ -3,27 +3,19 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * User
+ * CreateUser
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
-@Entity
-@SequenceGenerator(name = "user_seq", initialValue = 1000001)
 
-public class User   {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-  @JsonProperty("id")
-  private Long id = null;
 
+public class CreateUser   {
   @JsonProperty("firstName")
   private String firstName = null;
 
@@ -39,53 +31,7 @@ public class User   {
   @JsonProperty("password")
   private String password = null;
 
-  @JsonProperty("role")
-  private Role role = null;
-
-  public User id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-
-  public User() {}
-
-
-  public User(CreateUser createUser) {
-    this.firstName = createUser.getFirstName();
-    this.lastName = createUser.getLastName();
-    this.phoneNumber = createUser.getPhoneNumber();
-    this.emailAddress = createUser.getEmailAddress();
-    this.password = createUser.getPassword();
-    this.role = Role.CUSTOMER;
-
-  }
-
-  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role)
-  {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.phoneNumber = phoneNumber;
-    this.emailAddress = emailAddress;
-    this.password = password;
-    this.role = role;
-  }
-  /**
-   * Get id
-   * @return id
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public User firstName(String firstName) {
+  public CreateUser firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -105,7 +51,7 @@ public class User   {
     this.firstName = firstName;
   }
 
-  public User lastName(String lastName) {
+  public CreateUser lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -125,7 +71,7 @@ public class User   {
     this.lastName = lastName;
   }
 
-  public User phoneNumber(String phoneNumber) {
+  public CreateUser phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -145,7 +91,7 @@ public class User   {
     this.phoneNumber = phoneNumber;
   }
 
-  public User emailAddress(String emailAddress) {
+  public CreateUser emailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
     return this;
   }
@@ -165,7 +111,7 @@ public class User   {
     this.emailAddress = emailAddress;
   }
 
-  public User password(String password) {
+  public CreateUser password(String password) {
     this.password = password;
     return this;
   }
@@ -185,27 +131,6 @@ public class User   {
     this.password = password;
   }
 
-  public User role(Role role) {
-    this.role = role;
-    return this;
-  }
-
-  /**
-   * Get role
-   * @return role
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -215,33 +140,29 @@ public class User   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.firstName, user.firstName) &&
-        Objects.equals(this.lastName, user.lastName) &&
-        Objects.equals(this.phoneNumber, user.phoneNumber) &&
-        Objects.equals(this.emailAddress, user.emailAddress) &&
-        Objects.equals(this.password, user.password) &&
-        Objects.equals(this.role, user.role);
+    CreateUser createUser = (CreateUser) o;
+    return Objects.equals(this.firstName, createUser.firstName) &&
+        Objects.equals(this.lastName, createUser.lastName) &&
+        Objects.equals(this.phoneNumber, createUser.phoneNumber) &&
+        Objects.equals(this.emailAddress, createUser.emailAddress) &&
+        Objects.equals(this.password, createUser.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, phoneNumber, emailAddress, password, role);
+    return Objects.hash(firstName, lastName, phoneNumber, emailAddress, password);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
+    sb.append("class CreateUser {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
     sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
-    sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("}");
     return sb.toString();
   }
