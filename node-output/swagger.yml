@@ -104,7 +104,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/User"
+                "$ref" : "#/components/schemas/CreateUser"
               }
             }
           },
@@ -177,7 +177,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/User"
+                "$ref" : "#/components/schemas/ModifyUser"
               }
             }
           }
@@ -185,6 +185,9 @@
         "responses" : {
           "200" : {
             "description" : "user has been updated successfully"
+          },
+          "400" : {
+            "description" : "updating user has failed"
           }
         },
         "security" : [ {
@@ -210,6 +213,9 @@
         "responses" : {
           "200" : {
             "description" : "user has been deleted successfully"
+          },
+          "400" : {
+            "description" : "deleting user has failed"
           }
         },
         "security" : [ {
@@ -272,7 +278,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Account"
+                "$ref" : "#/components/schemas/CreateAccount"
               }
             }
           },
@@ -322,6 +328,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "account not found"
           }
         }
       },
@@ -345,7 +354,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Account"
+                "$ref" : "#/components/schemas/ModifyAccount"
               }
             }
           }
@@ -360,6 +369,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "modifying account has failed"
           }
         }
       },
@@ -381,7 +393,10 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Account has been delete successfully"
+            "description" : "account has been deleted successfully"
+          },
+          "400" : {
+            "description" : "deleting account has failed"
           }
         }
       }
@@ -426,6 +441,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "could not retrieve transactions"
           }
         }
       },
@@ -487,6 +505,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "transcation was not found"
           }
         }
       },
@@ -528,7 +549,7 @@
             }
           },
           "400" : {
-            "description" : "Updating transaction failed"
+            "description" : "updating transaction failed"
           }
         }
       },
@@ -552,7 +573,7 @@
             "description" : "successfully deleted transaction"
           },
           "400" : {
-            "description" : "deleting transaction failed"
+            "description" : "deleting transaction has failed"
           }
         }
       }
@@ -566,7 +587,7 @@
         "properties" : {
           "iban" : {
             "type" : "string",
-            "format" : "uuid"
+            "example" : "NLxxINHO0xxxxxxxxx"
           },
           "user" : {
             "$ref" : "#/components/schemas/User"
@@ -579,6 +600,35 @@
           }
         }
       },
+      "CreateAccount" : {
+        "required" : [ "accountType", "userId" ],
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer"
+          },
+          "accountType" : {
+            "$ref" : "#/components/schemas/AccountType"
+          }
+        }
+      },
+      "ModifyAccount" : {
+        "type" : "object",
+        "properties" : {
+          "balance" : {
+            "type" : "number"
+          },
+          "accountType" : {
+            "$ref" : "#/components/schemas/AccountType"
+          },
+          "iban" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "integer"
+          }
+        }
+      },
       "User" : {
         "required" : [ "emailAddress", "firstName", "id", "lastName", "password", "phoneNumber", "role" ],
         "type" : "object",
@@ -586,6 +636,54 @@
           "id" : {
             "type" : "integer"
           },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "emailAddress" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/Role"
+          }
+        }
+      },
+      "CreateUser" : {
+        "required" : [ "emailAddress", "firstName", "lastName", "password", "phoneNumber" ],
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "emailAddress" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          }
+        }
+      },
+      "ModifyUser" : {
+        "type" : "object",
+        "properties" : {
           "firstName" : {
             "type" : "string"
           },
@@ -667,11 +765,8 @@
         }
       },
       "ModifyTransaction" : {
-        "required" : [ "id" ],
+        "type" : "object",
         "properties" : {
-          "id" : {
-            "type" : "integer"
-          },
           "fromIban" : {
             "type" : "string"
           },
