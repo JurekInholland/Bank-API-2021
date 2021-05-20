@@ -484,6 +484,7 @@
         "tags" : [ "employees", "customers" ],
         "summary" : "Get a specific transaction",
         "description" : "get a specific transaction | User access; Customer (can only get their own transactions) & Employee",
+        "operationId" : "getTransactionById",
         "parameters" : [ {
           "name" : "transactionId",
           "in" : "path",
@@ -515,7 +516,7 @@
         "tags" : [ "employees" ],
         "summary" : "Update a transaction",
         "description" : "Update a single transaction via transactionId",
-        "operationId" : "transactionId",
+        "operationId" : "updateTransaction",
         "parameters" : [ {
           "name" : "transactionId",
           "in" : "path",
@@ -557,6 +558,7 @@
         "tags" : [ "employees" ],
         "summary" : "Delete a transaction",
         "description" : "Delete a single transaction via transactionId",
+        "operationId" : "deleteTransaction",
         "parameters" : [ {
           "name" : "transactionId",
           "in" : "path",
