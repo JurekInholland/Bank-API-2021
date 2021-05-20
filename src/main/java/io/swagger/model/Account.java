@@ -8,6 +8,10 @@ import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -15,13 +19,17 @@ import javax.validation.constraints.*;
  * Account
  */
 @Validated
+@Entity
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
 
 
 public class Account   {
+  @Id
   @JsonProperty("iban")
   private String iban = null;
 
+
+  @OneToOne
   @JsonProperty("user")
   private User user = null;
 

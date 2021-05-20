@@ -19,6 +19,8 @@ public class BankApiApplicationRunner implements ApplicationRunner
 {
     @Autowired
     private UserService userService;
+
+    @Autowired
     private AccountService accountservice;
 
     @Override
