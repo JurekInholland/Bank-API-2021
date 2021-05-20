@@ -112,14 +112,7 @@
         },
         "responses" : {
           "200" : {
-            "description" : "Created a user",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
-                }
-              }
-            }
+            "description" : "Created a user"
           },
           "400" : {
             "description" : "Invalid request, user not created"
@@ -286,14 +279,7 @@
         },
         "responses" : {
           "200" : {
-            "description" : "Account created successfully",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Account"
-                }
-              }
-            }
+            "description" : "Account created successfully"
           },
           "400" : {
             "description" : "Invalid request, account not created"
@@ -361,14 +347,7 @@
         },
         "responses" : {
           "200" : {
-            "description" : "account has been updated successfully",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Account"
-                }
-              }
-            }
+            "description" : "account has been updated successfully"
           },
           "400" : {
             "description" : "modifying account has failed"
@@ -464,14 +443,7 @@
         },
         "responses" : {
           "200" : {
-            "description" : "Transaction created successfully",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Transaction"
-                }
-              }
-            }
+            "description" : "Transaction created successfully"
           },
           "400" : {
             "description" : "Invalid request, transaction not created"
@@ -540,14 +512,7 @@
         },
         "responses" : {
           "200" : {
-            "description" : "successfully updated transaction",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Transaction"
-                }
-              }
-            }
+            "description" : "successfully updated transaction"
           },
           "400" : {
             "description" : "updating transaction failed"
@@ -729,7 +694,7 @@
         }
       },
       "Transaction" : {
-        "required" : [ "accountFrom", "accountTo", "amount", "id", "timestamp", "userPerforming" ],
+        "required" : [ "accountFrom", "accountTo", "amount", "id", "status", "timestamp", "userPerforming" ],
         "properties" : {
           "id" : {
             "type" : "integer"
