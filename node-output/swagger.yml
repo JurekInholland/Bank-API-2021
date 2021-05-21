@@ -104,7 +104,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/CreateUser"
+                "$ref" : "#/components/schemas/CreateUserDto"
               }
             }
           },
@@ -170,7 +170,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/ModifyUser"
+                "$ref" : "#/components/schemas/ModifyUserDto"
               }
             }
           }
@@ -271,7 +271,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/CreateAccount"
+                "$ref" : "#/components/schemas/CreateAccountDto"
               }
             }
           },
@@ -340,7 +340,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/ModifyAccount"
+                "$ref" : "#/components/schemas/ModifyAccountDto"
               }
             }
           }
@@ -413,10 +413,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Transaction"
-                  }
+                  "$ref" : "#/components/schemas/inline_response_200"
                 }
               }
             }
@@ -435,7 +432,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/CreateTransaction"
+                "$ref" : "#/components/schemas/CreateTransactionDto"
               }
             }
           },
@@ -474,7 +471,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Transaction"
+                  "$ref" : "#/components/schemas/PublicTransactionDto"
                 }
               }
             }
@@ -504,7 +501,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/ModifyTransaction"
+                "$ref" : "#/components/schemas/ModifyTransactionDto"
               }
             }
           },
@@ -567,10 +564,13 @@
           }
         }
       },
-      "CreateAccount" : {
+      "CreateAccountDto" : {
         "required" : [ "accountType", "userId" ],
         "type" : "object",
         "properties" : {
+          "iban" : {
+            "type" : "string"
+          },
           "userId" : {
             "type" : "integer"
           },
@@ -579,34 +579,34 @@
           }
         }
       },
-      "ModifyAccount" : {
+      "ModifyAccountDto" : {
         "type" : "object",
         "properties" : {
+          "iban" : {
+            "type" : "string"
+          },
           "balance" : {
             "type" : "number"
           },
           "accountType" : {
             "$ref" : "#/components/schemas/AccountType"
           },
-          "iban" : {
-            "type" : "string"
-          },
           "userId" : {
             "type" : "integer"
           }
         }
       },
-      "PublicAccount" : {
+      "PublicAccountDto" : {
         "type" : "object",
         "properties" : {
           "iban" : {
             "type" : "string"
           },
           "accountType" : {
-            "type" : "string"
+            "$ref" : "#/components/schemas/AccountType"
           },
           "owner" : {
-            "$ref" : "#/components/schemas/PublicUser"
+            "$ref" : "#/components/schemas/PublicUserDto"
           }
         }
       },
@@ -615,81 +615,96 @@
         "type" : "object",
         "properties" : {
           "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "emailAddress" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/Role"
+          }
+        }
+      },
+      "CreateUserDto" : {
+        "required" : [ "emailAddress", "firstName", "lastName", "password", "phoneNumber", "role" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number",
+            "format" : "int64"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "emailAddress" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/Role"
+          }
+        }
+      },
+      "ModifyUserDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "emailAddress" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "password"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/Role"
+          }
+        }
+      },
+      "PublicUserDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
             "type" : "integer"
           },
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          },
-          "phoneNumber" : {
-            "type" : "string"
-          },
-          "emailAddress" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "password" : {
-            "type" : "string",
-            "format" : "password"
-          },
-          "role" : {
-            "$ref" : "#/components/schemas/Role"
-          }
-        }
-      },
-      "CreateUser" : {
-        "required" : [ "emailAddress", "firstName", "lastName", "password", "phoneNumber" ],
-        "type" : "object",
-        "properties" : {
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          },
-          "phoneNumber" : {
-            "type" : "string"
-          },
-          "emailAddress" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "password" : {
-            "type" : "string",
-            "format" : "password"
-          }
-        }
-      },
-      "ModifyUser" : {
-        "type" : "object",
-        "properties" : {
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          },
-          "phoneNumber" : {
-            "type" : "string"
-          },
-          "emailAddress" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "password" : {
-            "type" : "string",
-            "format" : "password"
-          },
-          "role" : {
-            "$ref" : "#/components/schemas/Role"
-          }
-        }
-      },
-      "PublicUser" : {
-        "type" : "object",
-        "properties" : {
           "firstName" : {
             "type" : "string"
           },
@@ -719,22 +734,46 @@
         }
       },
       "Transaction" : {
-        "required" : [ "accountFrom", "accountTo", "amount", "id", "status", "timestamp", "userPerforming" ],
+        "required" : [ "accountFrom", "accountTo", "amount", "id", "timestamp", "userPerforming" ],
         "properties" : {
           "id" : {
             "type" : "integer"
           },
           "accountFrom" : {
-            "$ref" : "#/components/schemas/PublicAccount"
+            "$ref" : "#/components/schemas/Account"
           },
           "accountTo" : {
-            "$ref" : "#/components/schemas/PublicAccount"
+            "$ref" : "#/components/schemas/Account"
+          },
+          "userPerforming" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "timestamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "amount" : {
+            "type" : "number"
+          }
+        }
+      },
+      "PublicTransactionDto" : {
+        "required" : [ "accountFrom", "accountTo", "amount", "id", "timestamp", "userPerforming" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "accountFrom" : {
+            "$ref" : "#/components/schemas/PublicAccountDto"
+          },
+          "accountTo" : {
+            "$ref" : "#/components/schemas/PublicAccountDto"
           },
           "amount" : {
             "type" : "number"
           },
           "userPerforming" : {
-            "$ref" : "#/components/schemas/PublicUser"
+            "$ref" : "#/components/schemas/PublicUserDto"
           },
           "timestamp" : {
             "type" : "string",
@@ -742,7 +781,7 @@
           }
         }
       },
-      "CreateTransaction" : {
+      "CreateTransactionDto" : {
         "required" : [ "amount", "fromIban", "toIban" ],
         "properties" : {
           "fromIban" : {
@@ -756,7 +795,7 @@
           }
         }
       },
-      "ModifyTransaction" : {
+      "ModifyTransactionDto" : {
         "type" : "object",
         "properties" : {
           "fromIban" : {
@@ -784,6 +823,19 @@
       "AccountType" : {
         "type" : "string",
         "enum" : [ "current", "savings" ]
+      },
+      "inline_response_200" : {
+        "oneOf" : [ {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/components/schemas/PublicTransactionDto"
+          }
+        }, {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/components/schemas/Transaction"
+          }
+        } ]
       }
     },
     "securitySchemes" : {
