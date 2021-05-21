@@ -1,5 +1,6 @@
 package io.swagger.service;
 
+import io.swagger.api.exception.TransactionNotFoundException;
 import io.swagger.model.Account;
 import io.swagger.model.Transaction;
 import io.swagger.model.User;
@@ -29,12 +30,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction getTransactionById(int id) {
-        return transactionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
     }
 
     @Override
     public void deleteTransactionById(int id) {
-        transactionRepository.deleteById(id);
+        if (transactionRepository.findById(id) != null) {
+            transactionRepository.deleteById(id);
+        }
+
     }
 
     @Override

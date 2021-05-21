@@ -5,24 +5,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AccountType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ModifyAccount
+ * CreateAccountDto
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T15:39:24.948Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class ModifyAccount   {
-  @JsonProperty("balance")
-  private BigDecimal balance = null;
+public class CreateAccountDto   {
 
-  @JsonProperty("accountType")
-  private AccountType accountType = null;
 
   @JsonProperty("iban")
   private String iban = null;
@@ -30,47 +25,10 @@ public class ModifyAccount   {
   @JsonProperty("userId")
   private Integer userId = null;
 
-  public ModifyAccount balance(BigDecimal balance) {
-    this.balance = balance;
-    return this;
-  }
+  @JsonProperty("accountType")
+  private AccountType accountType = null;
 
-  /**
-   * Get balance
-   * @return balance
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public BigDecimal getBalance() {
-    return balance;
-  }
-
-  public void setBalance(BigDecimal balance) {
-    this.balance = balance;
-  }
-
-  public ModifyAccount accountType(AccountType accountType) {
-    this.accountType = accountType;
-    return this;
-  }
-
-  /**
-   * Get accountType
-   * @return accountType
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public AccountType getAccountType() {
-    return accountType;
-  }
-
-  public void setAccountType(AccountType accountType) {
-    this.accountType = accountType;
-  }
-
-  public ModifyAccount iban(String iban) {
+  public CreateAccountDto iban(String iban) {
     this.iban = iban;
     return this;
   }
@@ -89,7 +47,7 @@ public class ModifyAccount   {
     this.iban = iban;
   }
 
-  public ModifyAccount userId(Integer userId) {
+  public CreateAccountDto userId(Integer userId) {
     this.userId = userId;
     return this;
   }
@@ -98,14 +56,36 @@ public class ModifyAccount   {
    * Get userId
    * @return userId
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     public Integer getUserId() {
     return userId;
   }
 
   public void setUserId(Integer userId) {
     this.userId = userId;
+  }
+
+  public CreateAccountDto accountType(AccountType accountType) {
+    this.accountType = accountType;
+    return this;
+  }
+
+  /**
+   * Get accountType
+   * @return accountType
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public AccountType getAccountType() {
+    return accountType;
+  }
+
+  public void setAccountType(AccountType accountType) {
+    this.accountType = accountType;
   }
 
 
@@ -117,27 +97,25 @@ public class ModifyAccount   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ModifyAccount modifyAccount = (ModifyAccount) o;
-    return Objects.equals(this.balance, modifyAccount.balance) &&
-        Objects.equals(this.accountType, modifyAccount.accountType) &&
-        Objects.equals(this.iban, modifyAccount.iban) &&
-        Objects.equals(this.userId, modifyAccount.userId);
+    CreateAccountDto createAccountDto = (CreateAccountDto) o;
+    return Objects.equals(this.iban, createAccountDto.iban) &&
+        Objects.equals(this.userId, createAccountDto.userId) &&
+        Objects.equals(this.accountType, createAccountDto.accountType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(balance, accountType, iban, userId);
+    return Objects.hash(iban, userId, accountType);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ModifyAccount {\n");
+    sb.append("class CreateAccountDto {\n");
     
-    sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
-    sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
+    sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

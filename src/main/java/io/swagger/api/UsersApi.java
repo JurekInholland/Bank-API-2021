@@ -5,8 +5,8 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.CreateUser;
-import io.swagger.model.ModifyUser;
+import io.swagger.model.CreateUserDto;
+import io.swagger.model.ModifyUserDto;
 import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,64 +34,63 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T15:39:24.948Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 @Validated
 public interface UsersApi {
 
     @Operation(summary = "creating a user", description = "creating a user | User access; Employee", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Created a user", content = @Content(schema = @Schema(implementation = User.class))),
-
-            @ApiResponse(responseCode = "400", description = "Invalid request, user not created") })
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Created a user"),
+        
+        @ApiResponse(responseCode = "400", description = "Invalid request, user not created") })
     @RequestMapping(value = "/users",
-            produces = { "application/json" },
-            consumes = { "application/json" },
-            method = RequestMethod.POST)
-    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateUser body);
+        consumes = { "application/json" }, 
+        method = RequestMethod.POST)
+    ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateUserDto body);
 
 
     @Operation(summary = "delete a user", description = "deleting a user using the userid | User access; Employee", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "user has been deleted successfully"),
-
-            @ApiResponse(responseCode = "400", description = "deleting user has failed") })
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "user has been deleted successfully"),
+        
+        @ApiResponse(responseCode = "400", description = "deleting user has failed") })
     @RequestMapping(value = "/users/{userid}",
-            method = RequestMethod.DELETE)
+        method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to delete", required=true, schema=@Schema()) @PathVariable("userid") Integer userid);
 
 
     @Operation(summary = "get a user using user ID", description = "get a specific user using an ID | User access; Customer (can only get their user details) & Employee", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A json account object", content = @Content(schema = @Schema(implementation = User.class))) })
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "A json account object", content = @Content(schema = @Schema(implementation = User.class))) })
     @RequestMapping(value = "/users/{userid}",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
     ResponseEntity<User> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid);
 
 
     @Operation(summary = "get users", description = "getting a list of users | User access; Customer (can only get their own user details) & Employee", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A JSON array of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))) })
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "A JSON array of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))) })
     @RequestMapping(value = "/users",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
     ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
 
 
     @Operation(summary = "update a user", description = "updating a user using a userid | User access; Customer(can only update their own user details) & Employee", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "user has been updated successfully"),
-
-            @ApiResponse(responseCode = "400", description = "updating user has failed") })
+        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "user has been updated successfully"),
+        
+        @ApiResponse(responseCode = "400", description = "updating user has failed") })
     @RequestMapping(value = "/users/{userid}",
-            consumes = { "application/json" },
-            method = RequestMethod.PUT)
-    ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUser body);
+        consumes = { "application/json" }, 
+        method = RequestMethod.PUT)
+    ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body);
 
 }
 

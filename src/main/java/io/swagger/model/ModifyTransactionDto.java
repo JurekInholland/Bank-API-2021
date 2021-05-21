@@ -11,19 +11,22 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ModifyTransaction
+ * ModifyTransactionDto
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T15:39:24.948Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class ModifyTransaction   {
+public class ModifyTransactionDto   {
   @JsonProperty("fromIban")
   private String fromIban = null;
 
   @JsonProperty("toIban")
   private String toIban = null;
 
+  @Min(value=0, message = "Amount cannot be negative.")
+  @Max(value=1000000, message = "Maximum amount per transaction is 1,000,000 usd.")
+  @Digits(fraction = 2, integer=10, message = "Amount can have at most 2 decimal places.")
   @JsonProperty("amount")
   private BigDecimal amount = null;
 
@@ -33,9 +36,17 @@ public class ModifyTransaction   {
   @JsonProperty("timestamp")
   private OffsetDateTime timestamp = null;
 
-  public ModifyTransaction fromIban(String fromIban) {
+  public ModifyTransactionDto fromIban(String fromIban) {
     this.fromIban = fromIban;
     return this;
+  }
+
+//  Check if model is empty
+  public boolean isEmpty() {
+    if (this.getTimestamp() != null || this.getAmount() != null || this.getFromIban() != null || this.getToIban() != null || this.getPerformingUserId() != null) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -43,8 +54,8 @@ public class ModifyTransaction   {
    * @return fromIban
    **/
   @Schema(description = "")
-
-  public String getFromIban() {
+  
+    public String getFromIban() {
     return fromIban;
   }
 
@@ -52,7 +63,7 @@ public class ModifyTransaction   {
     this.fromIban = fromIban;
   }
 
-  public ModifyTransaction toIban(String toIban) {
+  public ModifyTransactionDto toIban(String toIban) {
     this.toIban = toIban;
     return this;
   }
@@ -62,8 +73,8 @@ public class ModifyTransaction   {
    * @return toIban
    **/
   @Schema(description = "")
-
-  public String getToIban() {
+  
+    public String getToIban() {
     return toIban;
   }
 
@@ -71,7 +82,7 @@ public class ModifyTransaction   {
     this.toIban = toIban;
   }
 
-  public ModifyTransaction amount(BigDecimal amount) {
+  public ModifyTransactionDto amount(BigDecimal amount) {
     this.amount = amount;
     return this;
   }
@@ -81,9 +92,9 @@ public class ModifyTransaction   {
    * @return amount
    **/
   @Schema(description = "")
-
-  @Valid
-  public BigDecimal getAmount() {
+  
+    @Valid
+    public BigDecimal getAmount() {
     return amount;
   }
 
@@ -91,7 +102,7 @@ public class ModifyTransaction   {
     this.amount = amount;
   }
 
-  public ModifyTransaction performingUserId(Integer performingUserId) {
+  public ModifyTransactionDto performingUserId(Integer performingUserId) {
     this.performingUserId = performingUserId;
     return this;
   }
@@ -101,8 +112,8 @@ public class ModifyTransaction   {
    * @return performingUserId
    **/
   @Schema(description = "")
-
-  public Integer getPerformingUserId() {
+  
+    public Integer getPerformingUserId() {
     return performingUserId;
   }
 
@@ -110,7 +121,7 @@ public class ModifyTransaction   {
     this.performingUserId = performingUserId;
   }
 
-  public ModifyTransaction timestamp(OffsetDateTime timestamp) {
+  public ModifyTransactionDto timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -120,9 +131,9 @@ public class ModifyTransaction   {
    * @return timestamp
    **/
   @Schema(description = "")
-
-  @Valid
-  public OffsetDateTime getTimestamp() {
+  
+    @Valid
+    public OffsetDateTime getTimestamp() {
     return timestamp;
   }
 
@@ -139,12 +150,12 @@ public class ModifyTransaction   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ModifyTransaction modifyTransaction = (ModifyTransaction) o;
-    return Objects.equals(this.fromIban, modifyTransaction.fromIban) &&
-            Objects.equals(this.toIban, modifyTransaction.toIban) &&
-            Objects.equals(this.amount, modifyTransaction.amount) &&
-            Objects.equals(this.performingUserId, modifyTransaction.performingUserId) &&
-            Objects.equals(this.timestamp, modifyTransaction.timestamp);
+    ModifyTransactionDto modifyTransactionDto = (ModifyTransactionDto) o;
+    return Objects.equals(this.fromIban, modifyTransactionDto.fromIban) &&
+        Objects.equals(this.toIban, modifyTransactionDto.toIban) &&
+        Objects.equals(this.amount, modifyTransactionDto.amount) &&
+        Objects.equals(this.performingUserId, modifyTransactionDto.performingUserId) &&
+        Objects.equals(this.timestamp, modifyTransactionDto.timestamp);
   }
 
   @Override
@@ -155,8 +166,8 @@ public class ModifyTransaction   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ModifyTransaction {\n");
-
+    sb.append("class ModifyTransactionDto {\n");
+    
     sb.append("    fromIban: ").append(toIndentedString(fromIban)).append("\n");
     sb.append("    toIban: ").append(toIndentedString(toIban)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");

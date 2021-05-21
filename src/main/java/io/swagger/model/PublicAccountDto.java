@@ -4,46 +4,49 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AccountType;
+import io.swagger.model.PublicUserDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateAccount
+ * PublicAccountDto
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class CreateAccount   {
-  @JsonProperty("userId")
-  private Integer userId = null;
+public class PublicAccountDto   {
+  @JsonProperty("iban")
+  private String iban = null;
 
   @JsonProperty("accountType")
   private AccountType accountType = null;
 
-  public CreateAccount userId(Integer userId) {
-    this.userId = userId;
+  @JsonProperty("owner")
+  private PublicUserDto user = null;
+
+  public PublicAccountDto iban(String iban) {
+    this.iban = iban;
     return this;
   }
 
   /**
-   * Get userId
-   * @return userId
+   * Get iban
+   * @return iban
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public Integer getUserId() {
-    return userId;
+  @Schema(description = "")
+  
+    public String getIban() {
+    return iban;
   }
 
-  public void setUserId(Integer userId) {
-    this.userId = userId;
+  public void setIban(String iban) {
+    this.iban = iban;
   }
 
-  public CreateAccount accountType(AccountType accountType) {
+  public PublicAccountDto accountType(AccountType accountType) {
     this.accountType = accountType;
     return this;
   }
@@ -52,9 +55,8 @@ public class CreateAccount   {
    * Get accountType
    * @return accountType
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public AccountType getAccountType() {
     return accountType;
@@ -62,6 +64,26 @@ public class CreateAccount   {
 
   public void setAccountType(AccountType accountType) {
     this.accountType = accountType;
+  }
+
+  public PublicAccountDto user(PublicUserDto user) {
+    this.user = user;
+    return this;
+  }
+
+  /**
+   * Get user
+   * @return user
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public PublicUserDto getuser() {
+    return user;
+  }
+
+  public void setuser(PublicUserDto user) {
+    this.user = user;
   }
 
 
@@ -73,23 +95,25 @@ public class CreateAccount   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CreateAccount createAccount = (CreateAccount) o;
-    return Objects.equals(this.userId, createAccount.userId) &&
-        Objects.equals(this.accountType, createAccount.accountType);
+    PublicAccountDto publicAccountDto = (PublicAccountDto) o;
+    return Objects.equals(this.iban, publicAccountDto.iban) &&
+        Objects.equals(this.accountType, publicAccountDto.accountType) &&
+        Objects.equals(this.user, publicAccountDto.user);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, accountType);
+    return Objects.hash(iban, accountType, user);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CreateAccount {\n");
+    sb.append("class PublicAccountDto {\n");
     
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
+    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
+    sb.append("    user: ").append(toIndentedString(user)).append("\n");
     sb.append("}");
     return sb.toString();
   }

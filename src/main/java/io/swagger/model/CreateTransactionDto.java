@@ -5,28 +5,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateTransaction
+ * CreateTransactionDto
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class CreateTransaction   {
+public class CreateTransactionDto   {
   @JsonProperty("fromIban")
   private String fromIban = null;
 
   @JsonProperty("toIban")
   private String toIban = null;
 
+  @Min(value=0, message = "Amount cannot be negative.")
+  @Max(value=1000000, message = "Maximum amount per transaction is 1,000,000 usd.")
+  @Digits(fraction = 2, integer=10, message = "Amount can have at most 2 decimal places.")
+  @NotNull(message = "Amount must be specified.")
   @JsonProperty("amount")
   private BigDecimal amount = null;
 
-  public CreateTransaction fromIban(String fromIban) {
+  public CreateTransactionDto fromIban(String fromIban) {
     this.fromIban = fromIban;
     return this;
   }
@@ -46,7 +52,7 @@ public class CreateTransaction   {
     this.fromIban = fromIban;
   }
 
-  public CreateTransaction toIban(String toIban) {
+  public CreateTransactionDto toIban(String toIban) {
     this.toIban = toIban;
     return this;
   }
@@ -66,7 +72,7 @@ public class CreateTransaction   {
     this.toIban = toIban;
   }
 
-  public CreateTransaction amount(BigDecimal amount) {
+  public CreateTransactionDto amount(BigDecimal amount) {
     this.amount = amount;
     return this;
   }
@@ -96,10 +102,10 @@ public class CreateTransaction   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CreateTransaction createTransaction = (CreateTransaction) o;
-    return Objects.equals(this.fromIban, createTransaction.fromIban) &&
-        Objects.equals(this.toIban, createTransaction.toIban) &&
-        Objects.equals(this.amount, createTransaction.amount);
+    CreateTransactionDto createTransactionDto = (CreateTransactionDto) o;
+    return Objects.equals(this.fromIban, createTransactionDto.fromIban) &&
+        Objects.equals(this.toIban, createTransactionDto.toIban) &&
+        Objects.equals(this.amount, createTransactionDto.amount);
   }
 
   @Override
@@ -110,7 +116,7 @@ public class CreateTransaction   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CreateTransaction {\n");
+    sb.append("class CreateTransactionDto {\n");
     
     sb.append("    fromIban: ").append(toIndentedString(fromIban)).append("\n");
     sb.append("    toIban: ").append(toIndentedString(toIban)).append("\n");

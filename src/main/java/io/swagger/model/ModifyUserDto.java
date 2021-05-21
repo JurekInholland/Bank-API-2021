@@ -3,19 +3,23 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * CreateUser
+ * ModifyUserDto
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class CreateUser   {
+public class ModifyUserDto   {
+  @JsonProperty("id")
+  private Long id = null;
+
   @JsonProperty("firstName")
   private String firstName = null;
 
@@ -31,7 +35,29 @@ public class CreateUser   {
   @JsonProperty("password")
   private String password = null;
 
-  public CreateUser firstName(String firstName) {
+  @JsonProperty("role")
+  private Role role = null;
+
+  public ModifyUserDto id(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   **/
+  @Schema(description = "")
+  
+    public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public ModifyUserDto firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -40,9 +66,8 @@ public class CreateUser   {
    * Get firstName
    * @return firstName
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getFirstName() {
     return firstName;
   }
@@ -51,7 +76,7 @@ public class CreateUser   {
     this.firstName = firstName;
   }
 
-  public CreateUser lastName(String lastName) {
+  public ModifyUserDto lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -60,9 +85,8 @@ public class CreateUser   {
    * Get lastName
    * @return lastName
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getLastName() {
     return lastName;
   }
@@ -71,7 +95,7 @@ public class CreateUser   {
     this.lastName = lastName;
   }
 
-  public CreateUser phoneNumber(String phoneNumber) {
+  public ModifyUserDto phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -80,9 +104,8 @@ public class CreateUser   {
    * Get phoneNumber
    * @return phoneNumber
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getPhoneNumber() {
     return phoneNumber;
   }
@@ -91,7 +114,7 @@ public class CreateUser   {
     this.phoneNumber = phoneNumber;
   }
 
-  public CreateUser emailAddress(String emailAddress) {
+  public ModifyUserDto emailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
     return this;
   }
@@ -100,9 +123,8 @@ public class CreateUser   {
    * Get emailAddress
    * @return emailAddress
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getEmailAddress() {
     return emailAddress;
   }
@@ -111,7 +133,7 @@ public class CreateUser   {
     this.emailAddress = emailAddress;
   }
 
-  public CreateUser password(String password) {
+  public ModifyUserDto password(String password) {
     this.password = password;
     return this;
   }
@@ -120,15 +142,34 @@ public class CreateUser   {
    * Get password
    * @return password
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getPassword() {
     return password;
   }
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public ModifyUserDto role(Role role) {
+    this.role = role;
+    return this;
+  }
+
+  /**
+   * Get role
+   * @return role
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
   }
 
 
@@ -140,29 +181,33 @@ public class CreateUser   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CreateUser createUser = (CreateUser) o;
-    return Objects.equals(this.firstName, createUser.firstName) &&
-        Objects.equals(this.lastName, createUser.lastName) &&
-        Objects.equals(this.phoneNumber, createUser.phoneNumber) &&
-        Objects.equals(this.emailAddress, createUser.emailAddress) &&
-        Objects.equals(this.password, createUser.password);
+    ModifyUserDto modifyUserDto = (ModifyUserDto) o;
+    return Objects.equals(this.id, modifyUserDto.id) &&
+        Objects.equals(this.firstName, modifyUserDto.firstName) &&
+        Objects.equals(this.lastName, modifyUserDto.lastName) &&
+        Objects.equals(this.phoneNumber, modifyUserDto.phoneNumber) &&
+        Objects.equals(this.emailAddress, modifyUserDto.emailAddress) &&
+        Objects.equals(this.password, modifyUserDto.password) &&
+        Objects.equals(this.role, modifyUserDto.role);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(firstName, lastName, phoneNumber, emailAddress, password);
+    return Objects.hash(id, firstName, lastName, phoneNumber, emailAddress, password, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CreateUser {\n");
+    sb.append("class ModifyUserDto {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
     sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("}");
     return sb.toString();
   }

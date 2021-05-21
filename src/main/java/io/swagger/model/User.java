@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * User
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T13:58:44.577Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 @Entity
 @SequenceGenerator(name = "user_seq", initialValue = 1000001)
 
@@ -46,21 +46,7 @@ public class User   {
     this.id = id;
     return this;
   }
-
-
   public User() {}
-
-
-  public User(CreateUser createUser) {
-    this.firstName = createUser.getFirstName();
-    this.lastName = createUser.getLastName();
-    this.phoneNumber = createUser.getPhoneNumber();
-    this.emailAddress = createUser.getEmailAddress();
-    this.password = createUser.getPassword();
-    this.role = Role.CUSTOMER;
-
-  }
-
   public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role)
   {
     this.firstName = firstName;
@@ -77,8 +63,8 @@ public class User   {
   @Schema(required = true, description = "")
       @NotNull
 
-  public Long getId() {
-    return id;
+    public Long getId() {
+      return id;
   }
 
   public void setId(Long id) {

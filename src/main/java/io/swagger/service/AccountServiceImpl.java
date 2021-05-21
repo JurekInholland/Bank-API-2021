@@ -1,11 +1,13 @@
 package io.swagger.service;
 
+import io.swagger.api.exception.AccountNotFoundException;
 import io.swagger.model.Account;
 import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,4 +46,10 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAccounts() {
         return (List<Account>) accountRepository.findAll();
     }
+
+    @Override
+    public Account getAccountByIban(String iban) {
+        return accountRepository.findById(iban).orElseThrow(AccountNotFoundException::new);
+    }
+
 }
