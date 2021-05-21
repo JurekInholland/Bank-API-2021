@@ -1,5 +1,6 @@
 package io.swagger.configuration;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -53,6 +54,11 @@ public class SwaggerDocumentationConfig {
                     .url("http://www.apache.org/licenses/LICENSE-2.0.html"))
                 .contact(new io.swagger.v3.oas.models.info.Contact()
                     .email("")));
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }
