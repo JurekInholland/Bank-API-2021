@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.api.exception.UserNotFoundException;
+import io.swagger.model.ModifyUserDto;
 import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import io.swagger.repository.TransactionRepository;
@@ -34,6 +35,12 @@ public class UserServiceImpl implements UserService
     public List<User> getUsers()
     {
         return (List<User>) userRepository.findAll();
+    }
+    public void updateUser(ModifyUserDto modifyUserDto, long id)
+    {
+        userRepository.updateUserById(
+                modifyUserDto.getFirstName(), modifyUserDto.getLastName(), modifyUserDto.getPhoneNumber(),
+                modifyUserDto.getEmailAddress(), modifyUserDto.getPassword(), modifyUserDto.getRoles(),id);
     }
     public void deleteUserById(long id)
     {

@@ -1,6 +1,7 @@
   
 package io.swagger.service;
 
+import io.swagger.model.ModifyUserDto;
 import io.swagger.model.User;
 import org.springframework.stereotype.Service;
 
@@ -12,4 +13,5 @@ public interface UserService
     User getUserById(long id);
     void deleteUserById(long id);
     List<User> getUsers();
+    void updateUser(ModifyUserDto modifyUserDto, long id);
 }

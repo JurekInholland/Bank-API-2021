@@ -76,15 +76,16 @@ public class UsersApiController implements UsersApi {
         User user = userService.getUserById(userid);
         return new ResponseEntity<>(user, HttpStatus.OK);    }
 
-    public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
+    public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue="0") Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) {
 
         List<User> users = userService.getUsers();
-        return new ResponseEntity<>(users.subList(offset,offset+limit),HttpStatus.OK);
+        return new ResponseEntity<>(users.subList(Math.min(users.size(), offset),Math.min(users.size(), offset + limit)),HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+
+        userService.updateUser(body,userid);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 //    Use ModelMapper to convert CreateUserDto to User object
@@ -92,7 +93,11 @@ public class UsersApiController implements UsersApi {
         User user = modelMapper.map(createUserDto, User.class);
         return user;
     }
-
+    private User convertToUpdateUserEntity(ModifyUserDto modifyUserDto)
+    {
+        User user = modelMapper.map(modifyUserDto, User.class);
+        return user;
+    }
 //    Convert User to PublicUserDto
 //
 //    private PublicUserDto convertToPublicDto(User user) {
