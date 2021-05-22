@@ -106,7 +106,7 @@ public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public Error handleAccessDeniedException(final AccessDeniedException ex) {
-        return new Error("ACCESS_DENIED", ex.getMessage());
+        return new Error("ACCESS_DENIED", "You don't have the necessary permissions to access this resource.");
     }
 
     //    CATCH ALL ERRORS
