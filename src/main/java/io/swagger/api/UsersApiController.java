@@ -83,8 +83,9 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+
+        userService.updateUser(body,userid);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 //    Use ModelMapper to convert CreateUserDto to User object
@@ -92,7 +93,11 @@ public class UsersApiController implements UsersApi {
         User user = modelMapper.map(createUserDto, User.class);
         return user;
     }
-
+    private User convertToUpdateUserEntity(ModifyUserDto modifyUserDto)
+    {
+        User user = modelMapper.map(modifyUserDto, User.class);
+        return user;
+    }
 //    Convert User to PublicUserDto
 //
 //    private PublicUserDto convertToPublicDto(User user) {
