@@ -5,24 +5,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * User
+ * CreateUserDto
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
-@Entity
-@SequenceGenerator(name = "user_seq", initialValue = 1000001)
 
-public class User   {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
+
+
+
+public class CreateUserDto   {
   @JsonProperty("id")
-  private Long id = null;
+  @Id
+  private BigDecimal id = null;
 
   @JsonProperty("firstName")
   private String firstName = null;
@@ -42,36 +44,27 @@ public class User   {
   @JsonProperty("role")
   private Role role = null;
 
-  public User id(Long id) {
+  public CreateUserDto id(BigDecimal id) {
     this.id = id;
     return this;
   }
-  public User() {}
-  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role)
-  {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.phoneNumber = phoneNumber;
-    this.emailAddress = emailAddress;
-    this.password = password;
-    this.role = role;
-  }
+
   /**
    * Get id
    * @return id
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public Long getId() {
-      return id;
+  @Schema(description = "")
+  
+    @Valid
+    public BigDecimal getId() {
+    return id;
   }
 
-  public void setId(Long id) {
+  public void setId(BigDecimal id) {
     this.id = id;
   }
 
-  public User firstName(String firstName) {
+  public CreateUserDto firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -91,7 +84,7 @@ public class User   {
     this.firstName = firstName;
   }
 
-  public User lastName(String lastName) {
+  public CreateUserDto lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -111,7 +104,7 @@ public class User   {
     this.lastName = lastName;
   }
 
-  public User phoneNumber(String phoneNumber) {
+  public CreateUserDto phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -131,7 +124,7 @@ public class User   {
     this.phoneNumber = phoneNumber;
   }
 
-  public User emailAddress(String emailAddress) {
+  public CreateUserDto emailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
     return this;
   }
@@ -151,7 +144,7 @@ public class User   {
     this.emailAddress = emailAddress;
   }
 
-  public User password(String password) {
+  public CreateUserDto password(String password) {
     this.password = password;
     return this;
   }
@@ -171,7 +164,7 @@ public class User   {
     this.password = password;
   }
 
-  public User role(Role role) {
+  public CreateUserDto role(Role role) {
     this.role = role;
     return this;
   }
@@ -201,14 +194,14 @@ public class User   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.firstName, user.firstName) &&
-        Objects.equals(this.lastName, user.lastName) &&
-        Objects.equals(this.phoneNumber, user.phoneNumber) &&
-        Objects.equals(this.emailAddress, user.emailAddress) &&
-        Objects.equals(this.password, user.password) &&
-        Objects.equals(this.role, user.role);
+    CreateUserDto createUserDto = (CreateUserDto) o;
+    return Objects.equals(this.id, createUserDto.id) &&
+        Objects.equals(this.firstName, createUserDto.firstName) &&
+        Objects.equals(this.lastName, createUserDto.lastName) &&
+        Objects.equals(this.phoneNumber, createUserDto.phoneNumber) &&
+        Objects.equals(this.emailAddress, createUserDto.emailAddress) &&
+        Objects.equals(this.password, createUserDto.password) &&
+        Objects.equals(this.role, createUserDto.role);
   }
 
   @Override
@@ -219,7 +212,7 @@ public class User   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
+    sb.append("class CreateUserDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");

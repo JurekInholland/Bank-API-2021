@@ -3,12 +3,17 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.api.exception.InsufficientBalanceException;
 import io.swagger.model.Account;
 import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.util.concurrent.ExecutionException;
+
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,33 +21,56 @@ import javax.validation.constraints.*;
  * Transaction
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@Entity
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
+@SequenceGenerator(name = "t_seq", initialValue = 1)
 
 
 public class Transaction   {
+  @Id
   @JsonProperty("id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "t_seq")
   private Integer id = null;
 
+  @OneToOne
   @JsonProperty("accountFrom")
   private Account accountFrom = null;
 
+  @OneToOne
   @JsonProperty("accountTo")
   private Account accountTo = null;
 
-  @JsonProperty("amount")
-  private BigDecimal amount = null;
-
+  @OneToOne
   @JsonProperty("userPerforming")
   private User userPerforming = null;
 
   @JsonProperty("timestamp")
   private OffsetDateTime timestamp = null;
 
+  @JsonProperty("amount")
+  private BigDecimal amount = null;
+
   public Transaction id(Integer id) {
     this.id = id;
     return this;
   }
 
+  public void execute() {
+    if (this.getTimestamp() != null) {
+      System.out.println("TRANSACTION IS EXECUTED TWICE!");
+      return;
+    }
+    this.getAccountFrom().setBalance(this.getAccountFrom().getBalance().subtract(this.amount));
+    this.getAccountTo().setBalance(this.getAccountTo().getBalance().add(this.amount));
+    this.setTimestamp(OffsetDateTime.now());
+  }
+
+  public Boolean isValid() {
+    if (this.getTimestamp() == null && this.getAccountFrom().getBalance().compareTo(this.getAmount()) > 0 ) {
+      return true;
+    }
+    return false;
+  }
   /**
    * Get id
    * @return id
@@ -100,27 +128,6 @@ public class Transaction   {
     this.accountTo = accountTo;
   }
 
-  public Transaction amount(BigDecimal amount) {
-    this.amount = amount;
-    return this;
-  }
-
-  /**
-   * Get amount
-   * @return amount
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public BigDecimal getAmount() {
-    return amount;
-  }
-
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
-  }
-
   public Transaction userPerforming(User userPerforming) {
     this.userPerforming = userPerforming;
     return this;
@@ -163,6 +170,27 @@ public class Transaction   {
     this.timestamp = timestamp;
   }
 
+  public Transaction amount(BigDecimal amount) {
+    this.amount = amount;
+    return this;
+  }
+
+  /**
+   * Get amount
+   * @return amount
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public BigDecimal getAmount() {
+    return amount;
+  }
+
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -176,14 +204,14 @@ public class Transaction   {
     return Objects.equals(this.id, transaction.id) &&
         Objects.equals(this.accountFrom, transaction.accountFrom) &&
         Objects.equals(this.accountTo, transaction.accountTo) &&
-        Objects.equals(this.amount, transaction.amount) &&
         Objects.equals(this.userPerforming, transaction.userPerforming) &&
-        Objects.equals(this.timestamp, transaction.timestamp);
+        Objects.equals(this.timestamp, transaction.timestamp) &&
+        Objects.equals(this.amount, transaction.amount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, accountFrom, accountTo, amount, userPerforming, timestamp);
+    return Objects.hash(id, accountFrom, accountTo, userPerforming, timestamp, amount);
   }
 
   @Override
@@ -194,9 +222,9 @@ public class Transaction   {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    accountFrom: ").append(toIndentedString(accountFrom)).append("\n");
     sb.append("    accountTo: ").append(toIndentedString(accountTo)).append("\n");
-    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("    userPerforming: ").append(toIndentedString(userPerforming)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
+    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("}");
     return sb.toString();
   }

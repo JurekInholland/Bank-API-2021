@@ -5,6 +5,8 @@
  */
 package io.swagger.api;
 
+import io.swagger.model.CreateUserDto;
+import io.swagger.model.ModifyUserDto;
 import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,7 +18,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 @Validated
 public interface UsersApi {
 
@@ -46,13 +47,15 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody User body);
+    ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateUserDto body);
 
 
     @Operation(summary = "delete a user", description = "deleting a user using the userid | User access; Employee", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "user has been deleted successfully") })
+        @ApiResponse(responseCode = "200", description = "user has been deleted successfully"),
+        
+        @ApiResponse(responseCode = "400", description = "deleting user has failed") })
     @RequestMapping(value = "/users/{userid}",
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to delete", required=true, schema=@Schema()) @PathVariable("userid") Integer userid);
@@ -61,7 +64,7 @@ public interface UsersApi {
     @Operation(summary = "get a user using user ID", description = "get a specific user using an ID | User access; Customer (can only get their user details) & Employee", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A json account object", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))) })
+        @ApiResponse(responseCode = "200", description = "A json account object", content = @Content(schema = @Schema(implementation = User.class))) })
     @RequestMapping(value = "/users/{userid}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -81,11 +84,13 @@ public interface UsersApi {
     @Operation(summary = "update a user", description = "updating a user using a userid | User access; Customer(can only update their own user details) & Employee", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "user has been updated successfully") })
+        @ApiResponse(responseCode = "200", description = "user has been updated successfully"),
+        
+        @ApiResponse(responseCode = "400", description = "updating user has failed") })
     @RequestMapping(value = "/users/{userid}",
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body);
+    ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body);
 
 }
 

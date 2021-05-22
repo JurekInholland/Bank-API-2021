@@ -5,8 +5,8 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.Body;
-import io.swagger.model.InlineResponse200;
+import io.swagger.model.LoginToken;
+import io.swagger.model.UserLogin;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,20 +33,20 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 @Validated
 public interface LoginApi {
 
     @Operation(summary = "Login a user", description = "User logins with an email and password", tags={ "auth" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "You have successfully logged in", content = @Content(schema = @Schema(implementation = InlineResponse200.class))),
+        @ApiResponse(responseCode = "200", description = "You have successfully logged in", content = @Content(schema = @Schema(implementation = LoginToken.class))),
         
         @ApiResponse(responseCode = "400", description = "Incorrect email/password") })
     @RequestMapping(value = "/login",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<InlineResponse200> loginUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Body body);
+    ResponseEntity<LoginToken> loginUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody UserLogin body);
 
 }
 

@@ -6,21 +6,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * User
+ * ModifyUserDto
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
-@Entity
-@SequenceGenerator(name = "user_seq", initialValue = 1000001)
 
-public class User   {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+
+public class ModifyUserDto   {
   @JsonProperty("id")
   private Long id = null;
 
@@ -42,36 +38,26 @@ public class User   {
   @JsonProperty("role")
   private Role role = null;
 
-  public User id(Long id) {
+  public ModifyUserDto id(Long id) {
     this.id = id;
     return this;
   }
-  public User() {}
-  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role)
-  {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.phoneNumber = phoneNumber;
-    this.emailAddress = emailAddress;
-    this.password = password;
-    this.role = role;
-  }
+
   /**
    * Get id
    * @return id
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public Long getId() {
-      return id;
+    return id;
   }
 
   public void setId(Long id) {
     this.id = id;
   }
 
-  public User firstName(String firstName) {
+  public ModifyUserDto firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -80,9 +66,8 @@ public class User   {
    * Get firstName
    * @return firstName
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getFirstName() {
     return firstName;
   }
@@ -91,7 +76,7 @@ public class User   {
     this.firstName = firstName;
   }
 
-  public User lastName(String lastName) {
+  public ModifyUserDto lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -100,9 +85,8 @@ public class User   {
    * Get lastName
    * @return lastName
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getLastName() {
     return lastName;
   }
@@ -111,7 +95,7 @@ public class User   {
     this.lastName = lastName;
   }
 
-  public User phoneNumber(String phoneNumber) {
+  public ModifyUserDto phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -120,9 +104,8 @@ public class User   {
    * Get phoneNumber
    * @return phoneNumber
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getPhoneNumber() {
     return phoneNumber;
   }
@@ -131,7 +114,7 @@ public class User   {
     this.phoneNumber = phoneNumber;
   }
 
-  public User emailAddress(String emailAddress) {
+  public ModifyUserDto emailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
     return this;
   }
@@ -140,9 +123,8 @@ public class User   {
    * Get emailAddress
    * @return emailAddress
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getEmailAddress() {
     return emailAddress;
   }
@@ -151,7 +133,7 @@ public class User   {
     this.emailAddress = emailAddress;
   }
 
-  public User password(String password) {
+  public ModifyUserDto password(String password) {
     this.password = password;
     return this;
   }
@@ -160,9 +142,8 @@ public class User   {
    * Get password
    * @return password
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getPassword() {
     return password;
   }
@@ -171,7 +152,7 @@ public class User   {
     this.password = password;
   }
 
-  public User role(Role role) {
+  public ModifyUserDto role(Role role) {
     this.role = role;
     return this;
   }
@@ -180,9 +161,8 @@ public class User   {
    * Get role
    * @return role
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public Role getRole() {
     return role;
@@ -201,14 +181,14 @@ public class User   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.firstName, user.firstName) &&
-        Objects.equals(this.lastName, user.lastName) &&
-        Objects.equals(this.phoneNumber, user.phoneNumber) &&
-        Objects.equals(this.emailAddress, user.emailAddress) &&
-        Objects.equals(this.password, user.password) &&
-        Objects.equals(this.role, user.role);
+    ModifyUserDto modifyUserDto = (ModifyUserDto) o;
+    return Objects.equals(this.id, modifyUserDto.id) &&
+        Objects.equals(this.firstName, modifyUserDto.firstName) &&
+        Objects.equals(this.lastName, modifyUserDto.lastName) &&
+        Objects.equals(this.phoneNumber, modifyUserDto.phoneNumber) &&
+        Objects.equals(this.emailAddress, modifyUserDto.emailAddress) &&
+        Objects.equals(this.password, modifyUserDto.password) &&
+        Objects.equals(this.role, modifyUserDto.role);
   }
 
   @Override
@@ -219,7 +199,7 @@ public class User   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
+    sb.append("class ModifyUserDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");

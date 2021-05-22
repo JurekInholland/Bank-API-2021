@@ -4,32 +4,22 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AccountType;
-import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Account
+ * ModifyAccountDto
  */
 @Validated
-@Entity
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-20T14:30:32.476Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class Account   {
-  @Id
+public class ModifyAccountDto   {
   @JsonProperty("iban")
   private String iban = null;
-
-  @OneToOne
-  @JsonProperty("user")
-  private User user = null;
 
   @JsonProperty("balance")
   private BigDecimal balance = null;
@@ -37,28 +27,20 @@ public class Account   {
   @JsonProperty("accountType")
   private AccountType accountType = null;
 
-  public Account iban(String iban) {
+  @JsonProperty("userId")
+  private Integer userId = null;
+
+  public ModifyAccountDto iban(String iban) {
     this.iban = iban;
     return this;
   }
-  // TODO: Make Model cleaner
-  public Account () {
-  }
 
-  public Account ( String iban, User user, BigDecimal balance, AccountType accountType){
-    this.iban = iban;
-    this.user = user;
-    this.balance = balance;
-    this.accountType = accountType;
-
-  }
   /**
    * Get iban
    * @return iban
    **/
-  @Schema(example = "NLxxINHO0xxxxxxxxx", required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     public String getIban() {
     return iban;
   }
@@ -67,28 +49,7 @@ public class Account   {
     this.iban = iban;
   }
 
-  public Account user(User user) {
-    this.user = user;
-    return this;
-  }
-
-  /**
-   * Get user
-   * @return user
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public Account balance(BigDecimal balance) {
+  public ModifyAccountDto balance(BigDecimal balance) {
     this.balance = balance;
     return this;
   }
@@ -97,9 +58,8 @@ public class Account   {
    * Get balance
    * @return balance
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public BigDecimal getBalance() {
     return balance;
@@ -109,7 +69,7 @@ public class Account   {
     this.balance = balance;
   }
 
-  public Account accountType(AccountType accountType) {
+  public ModifyAccountDto accountType(AccountType accountType) {
     this.accountType = accountType;
     return this;
   }
@@ -118,9 +78,8 @@ public class Account   {
    * Get accountType
    * @return accountType
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public AccountType getAccountType() {
     return accountType;
@@ -128,6 +87,25 @@ public class Account   {
 
   public void setAccountType(AccountType accountType) {
     this.accountType = accountType;
+  }
+
+  public ModifyAccountDto userId(Integer userId) {
+    this.userId = userId;
+    return this;
+  }
+
+  /**
+   * Get userId
+   * @return userId
+   **/
+  @Schema(description = "")
+  
+    public Integer getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Integer userId) {
+    this.userId = userId;
   }
 
 
@@ -139,27 +117,27 @@ public class Account   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Account account = (Account) o;
-    return Objects.equals(this.iban, account.iban) &&
-        Objects.equals(this.user, account.user) &&
-        Objects.equals(this.balance, account.balance) &&
-        Objects.equals(this.accountType, account.accountType);
+    ModifyAccountDto modifyAccountDto = (ModifyAccountDto) o;
+    return Objects.equals(this.iban, modifyAccountDto.iban) &&
+        Objects.equals(this.balance, modifyAccountDto.balance) &&
+        Objects.equals(this.accountType, modifyAccountDto.accountType) &&
+        Objects.equals(this.userId, modifyAccountDto.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(iban, user, balance, accountType);
+    return Objects.hash(iban, balance, accountType, userId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Account {\n");
+    sb.append("class ModifyAccountDto {\n");
     
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
-    sb.append("    user: ").append(toIndentedString(user)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
+    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

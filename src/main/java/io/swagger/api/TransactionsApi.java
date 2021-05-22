@@ -5,8 +5,10 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.Body1;
-import io.swagger.model.Transaction;
+import io.swagger.model.CreateTransactionDto;
+import io.swagger.model.Error;
+import io.swagger.model.ModifyTransactionDto;
+import io.swagger.model.PublicTransactionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,63 +35,68 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-04T07:44:48.337Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T16:08:07.736Z[GMT]")
 @Validated
 public interface TransactionsApi {
 
     @Operation(summary = "Create a transaction", description = "creating a transaction", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Transaction created successfully"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid request, transaction not created") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transaction created successfully"),
+
+            @ApiResponse(responseCode = "400", description = "Unexpected error", content = @Content(schema = @Schema(implementation = Error.class))) })
     @RequestMapping(value = "/transactions",
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody List<Transaction> body);
-
-
-    @Operation(summary = "List transactions", description = "getting a list of transactions", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A JSON array of transactions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))) })
-    @RequestMapping(value = "/transactions",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactions(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
-
-
-    @Operation(summary = "Update a transaction", description = "Update a single transaction via transactionId", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successfully updated transaction"),
-        
-        @ApiResponse(responseCode = "400", description = "Updating transaction failed") })
-    @RequestMapping(value = "/transactions/{transactionId}",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> transactionId(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Body1 body);
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.POST)
+    ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateTransactionDto body);
 
 
     @Operation(summary = "Delete a transaction", description = "Delete a single transaction via transactionId", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successfully deleted transaction"),
-        
-        @ApiResponse(responseCode = "400", description = "deleting transaction failed") })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully deleted transaction"),
+
+            @ApiResponse(responseCode = "400", description = "deleting transaction has failed") })
     @RequestMapping(value = "/transactions/{transactionId}",
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> transactionsTransactionIdDelete(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId);
+            method = RequestMethod.DELETE)
+    ResponseEntity<Void> deleteTransaction(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId);
 
 
     @Operation(summary = "Get a specific transaction", description = "get a specific transaction | User access; Customer (can only get their own transactions) & Employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A json transaction object", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))) })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A json transaction object", content = @Content(schema = @Schema(implementation = PublicTransactionDto.class))),
+
+            @ApiResponse(responseCode = "400", description = "transcation was not found") })
     @RequestMapping(value = "/transactions/{transactionId}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> transactionsTransactionIdGet(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId);
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<PublicTransactionDto> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId);
+
+
+    @Operation(summary = "List transactions", description = "getting a list of transactions", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees", "customers" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A JSON array of transactions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = PublicTransactionDto.class)))),
+
+            @ApiResponse(responseCode = "400", description = "could not retrieve transactions") })
+    @RequestMapping(value = "/transactions",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<PublicTransactionDto>> getTransactions(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+
+
+    @Operation(summary = "Update a transaction", description = "Update a single transaction via transactionId", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "employees" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully updated transaction"),
+
+            @ApiResponse(responseCode = "400", description = "updating transaction failed") })
+    @RequestMapping(value = "/transactions/{transactionId}",
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<Void> updateTransaction(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ModifyTransactionDto body);
 
 }
 
