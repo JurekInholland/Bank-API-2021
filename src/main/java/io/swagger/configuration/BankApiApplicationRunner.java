@@ -5,6 +5,7 @@ import io.swagger.service.AccountService;
 import io.swagger.service.TransactionService;
 import io.swagger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,11 @@ public class BankApiApplicationRunner implements ApplicationRunner
 
     @Autowired
     PasswordEncoder encoder;
+
+
+//    Get bank iban from application.properties
+    @Value("${server.bankAccount.iban}")
+    private String bankIban;
 
     @Override
     public void run(ApplicationArguments args) throws Exception
@@ -61,10 +67,10 @@ public class BankApiApplicationRunner implements ApplicationRunner
         List<Account> accountList = new ArrayList<Account>();
 
 //        Create dedicated bank account
-        Account bankAccount = new Account("NL01INHO0000000001",users.get(10),BigDecimal.valueOf(9999999), AccountType.CURRENT);
+        Account bankAccount = new Account(bankIban,users.get(10),BigDecimal.valueOf(9999999), AccountType.CURRENT);
 
         // Add fixed accounts for debugging
-        Account fixedAccount1 = new Account("TESTIBAN01", users.get(0), BigDecimal.valueOf(1000.20), AccountType.CURRENT);
+        Account fixedAccount1 = new Account("TESTIBAN01", users.get(0), BigDecimal.valueOf(5000), AccountType.SAVINGS);
         Account fixedAccount2 = new Account("TESTIBAN02", users.get(1), BigDecimal.valueOf(500.50), AccountType.CURRENT);
         accountList.add(fixedAccount1);
         accountList.add(fixedAccount2);
@@ -94,6 +100,7 @@ public class BankApiApplicationRunner implements ApplicationRunner
             }
         }
         accountservice.addAccount(accountList);
+
         Transaction testTransaction = new Transaction();
         testTransaction.setAmount(BigDecimal.valueOf(25.25));
         testTransaction.setTimestamp(OffsetDateTime.now().minusDays(1).minusHours(1));

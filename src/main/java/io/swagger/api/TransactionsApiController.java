@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,9 +22,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.threeten.bp.OffsetDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +47,9 @@ public class TransactionsApiController implements TransactionsApi {
     @Autowired
     private UserService userService;
 
+    @Value("${server.bankAccount.iban}")
+    private String bankIban;
+
     private static final Logger log = LoggerFactory.getLogger(TransactionsApiController.class);
 
     private final ObjectMapper objectMapper;
@@ -57,8 +63,10 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     public ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateTransactionDto body) {
-//      TODO: check daily limit
         Transaction transaction = createTransactionFromDto(body);
+        validateTransaction(transaction);
+        transaction.execute();
+
         transactionService.addTransaction(transaction);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -129,40 +137,100 @@ public class TransactionsApiController implements TransactionsApi {
         Account toAccount = null;
 
         transaction = modelMapper.map(createTransaction, Transaction.class);
+
         fromAccount = accountService.getAccountByIban(createTransaction.getFromIban());
-        toAccount = accountService.getAccountByIban(createTransaction.getToIban());
-
-        User currentUser = userService.getUserById(CurrentUserInfo.getCurrentUserId());
-
         transaction.setAccountFrom(fromAccount);
+
+        toAccount = accountService.getAccountByIban(createTransaction.getToIban());
         transaction.setAccountTo(toAccount);
+
+//        This 'database lookup' could be avoided...
+        User currentUser = userService.getUserById(CurrentUserInfo.getCurrentUserId());
         transaction.setUserPerforming(currentUser);
 
-        if (fromAccount.getUser().getId() != currentUser.getId()) {
-            if (! CurrentUserInfo.isEmployee()) {
-                throw new NoAccessToAccountException();
+        return transaction;
+    }
+
+    private void validateTransaction(Transaction transaction) {
+        validateDailyLimit(transaction);
+        validateAbsoluteLimit(transaction);
+        validateTransactionLimit(transaction);
+        validateSavingsAccount(transaction);
+        validateEmployeeAccess(transaction);
+        validateSameAccount(transaction);
+    }
+
+    private void validateDailyLimit(Transaction transaction) {
+        List<Transaction> userTransactions = transactionService.getUserTransactions(transaction.getUserPerforming());
+
+        BigDecimal dailySum = getDailySum(userTransactions);
+        dailySum = dailySum.add(transaction.getAmount());
+
+        BigDecimal dailyLimit = transaction.getUserPerforming().getDailyLimit();
+
+        if (dailySum.compareTo(dailyLimit) > 0) {
+            throw new DailyLimitReachedException(dailyLimit);
+        }
+    }
+
+    private void validateAbsoluteLimit(Transaction transaction) {
+        if (transaction.getAccountFrom().getBalance().subtract(transaction.getAmount()).compareTo(transaction.getAccountFrom().getAbsoluteLimit()) < 0) {
+            throw new AbsoluteLimitException(transaction.getAmount(),transaction.getAccountFrom().getBalance(),transaction.getAccountFrom().getAbsoluteLimit());
+        }
+    }
+
+    private void validateTransactionLimit(Transaction transaction) {
+        if (transaction.getAmount().compareTo(transaction.getUserPerforming().getTransactionLimit()) > 0) {
+            throw new TransactionLimitError(transaction.getAmount(), transaction.getUserPerforming().getTransactionLimit());
+        }
+    }
+
+    private void validateSavingsAccount(Transaction transaction) {
+
+        //        Validate only owners can transfer to and from savings account
+        if (transaction.getAccountFrom().getUser() != transaction.getAccountTo().getUser()) {
+            if (transaction.getAccountFrom().getAccountType() == AccountType.SAVINGS) {
+                throw new SavingsAccountMismatchException("You cannot transfer from a savings account to another account you don't own.");
+            }
+            if (transaction.getAccountTo().getAccountType() == AccountType.SAVINGS) {
+                throw new SavingsAccountMismatchException("You cannot transfer to a savings account you don't own.");
             }
         }
+    }
 
-        if (fromAccount == null || toAccount == null) {
-            throw new AccountNotFoundException();
+    private void validateEmployeeAccess(Transaction transaction) {
+
+        //        Only employees have access to accounts they don't own
+        if (transaction.getAccountFrom().getUser().getId() != transaction.getUserPerforming().getId()) {
+
+//            Only the owner has access to the bank's account
+            if (! CurrentUserInfo.isEmployee() || transaction.getAccountFrom().getIban().equals(bankIban) ) {
+                throw new NoAccessToAccountException(transaction.getAccountFrom().getIban());
+            }
         }
-        if (fromAccount.getIban() == toAccount.getIban()) {
+    }
+
+    private void validateSameAccount(Transaction transaction) {
+        if (transaction.getAccountFrom().getIban() == transaction.getAccountTo().getIban()) {
             throw new InvalidAccountException();
         }
+    }
 
-        if (transaction.hasSufficientBalance()) {
-            transaction.execute();
-        } else {
-            throw new InsufficientBalanceException();
-        }
+    private BigDecimal getDailySum(List<Transaction> transactions) {
+        //    Sum up amount of all transactions within last day
+        BigDecimal dailySum = transactions.stream()
+                .map(transaction -> {
+                    if (transaction.getTimestamp().isAfter(OffsetDateTime.now().minusDays(1))) {
+                        return transaction.getAmount();
+                    }
+                    return BigDecimal.ZERO;
+                }).reduce(BigDecimal.ZERO,BigDecimal::add);
 
-        return transaction;
+        return dailySum;
     }
 
     private PublicTransactionDto convertToDto(Transaction transaction) {
         PublicTransactionDto publicTransactionDto = modelMapper.map(transaction, PublicTransactionDto.class);
         return publicTransactionDto;
     }
-
 }
