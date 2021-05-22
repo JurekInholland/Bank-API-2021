@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.access.AccessDeniedException;
 
 @ControllerAdvice
 public class ExceptionHandlers {
@@ -63,6 +64,12 @@ public class ExceptionHandlers {
         return new Error("TRANSACTION_NOT_FOUND", "This transaction does not exist.");
     }
 
+    @ExceptionHandler(NoAccessToAccountException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public Error handleNoAccessToAccountException(final NoAccessToAccountException ex) {
+        return new Error("NO_PERMISSION", "You are not allowed to access this account.");
+    }
 
 //    HANDLE VALIDATION ERRORS
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -91,6 +98,15 @@ public class ExceptionHandlers {
     @ResponseBody
     public Error handleHttpMessageNotReadableException(final HttpMessageNotReadableException ex) {
         return new Error("INVALID_JSON", ex.getMessage());
+    }
+
+
+//    HANDLE ACCESS DENIED (employee only endpoint reached as user)
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public Error handleAccessDeniedException(final AccessDeniedException ex) {
+        return new Error("ACCESS_DENIED", ex.getMessage());
     }
 
     //    CATCH ALL ERRORS

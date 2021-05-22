@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -39,22 +40,29 @@ public class User   {
   @JsonProperty("password")
   private String password = null;
 
-  @JsonProperty("role")
-  private Role role = null;
+  @JsonProperty("dailyLimit")
+  private BigDecimal dailyLimit = new BigDecimal(10000);
+
+  @JsonProperty("transactionLimit")
+  private BigDecimal transactionLimit = new BigDecimal(2000);
+
+  @JsonProperty("roles")
+  private UserRoles roles = null;
+
 
   public User id(Long id) {
     this.id = id;
     return this;
   }
   public User() {}
-  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role)
+  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, UserRoles roles)
   {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
     this.emailAddress = emailAddress;
     this.password = password;
-    this.role = role;
+    this.roles = roles;
   }
   /**
    * Get id
@@ -171,25 +179,68 @@ public class User   {
     this.password = password;
   }
 
-  public User role(Role role) {
-    this.role = role;
+
+
+
+  public User dailyLimit(BigDecimal dailyLimit) {
+    this.dailyLimit = dailyLimit;
     return this;
   }
 
   /**
-   * Get role
-   * @return role
+   * The cumulative value of transactions occurring on a day cannot surpass a certain number defined per user, referred to as day limit
+   * @return dailyLimit
    **/
-  @Schema(required = true, description = "")
-      @NotNull
+  @Schema(description = "The cumulative value of transactions occurring on a day cannot surpass a certain number defined per user, referred to as day limit")
 
-    @Valid
-    public Role getRole() {
-    return role;
+  @Valid
+  public BigDecimal getDailyLimit() {
+    return dailyLimit;
   }
 
-  public void setRole(Role role) {
-    this.role = role;
+  public void setDailyLimit(BigDecimal dailyLimit) {
+    this.dailyLimit = dailyLimit;
+  }
+
+  public User transactionLimit(BigDecimal transactionLimit) {
+    this.transactionLimit = transactionLimit;
+    return this;
+  }
+
+  /**
+   * The maximum amount per transaction cannot be higher than a certain number defined per user, referred to as transaction limit
+   * @return transactionLimit
+   **/
+  @Schema(description = "The maximum amount per transaction cannot be higher than a certain number defined per user, referred to as transaction limit")
+
+  @Valid
+  public BigDecimal getTransactionLimit() {
+    return transactionLimit;
+  }
+
+  public void setTransactionLimit(BigDecimal transactionLimit) {
+    this.transactionLimit = transactionLimit;
+  }
+
+  public User roles(UserRoles roles) {
+    this.roles = roles;
+    return this;
+  }
+
+  /**
+   * Get roles
+   * @return roles
+   **/
+  @Schema(required = true, description = "")
+  @NotNull
+
+  @Valid
+  public UserRoles getRoles() {
+    return roles;
+  }
+
+  public void setRoles(UserRoles roles) {
+    this.roles = roles;
   }
 
 
@@ -208,26 +259,30 @@ public class User   {
         Objects.equals(this.phoneNumber, user.phoneNumber) &&
         Objects.equals(this.emailAddress, user.emailAddress) &&
         Objects.equals(this.password, user.password) &&
-        Objects.equals(this.role, user.role);
+        Objects.equals(this.dailyLimit, user.dailyLimit) &&
+        Objects.equals(this.transactionLimit, user.transactionLimit) &&
+        Objects.equals(this.roles, user.roles);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, phoneNumber, emailAddress, password, role);
+    return Objects.hash(id, firstName, lastName, phoneNumber, emailAddress, password, roles);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class User {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
     sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
-    sb.append("    role: ").append(toIndentedString(role)).append("\n");
+    sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");
+    sb.append("    transactionLimit: ").append(toIndentedString(transactionLimit)).append("\n");
+    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("}");
     return sb.toString();
   }

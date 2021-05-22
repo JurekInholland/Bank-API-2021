@@ -1,21 +1,16 @@
 package io.swagger.model;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.api.exception.InsufficientBalanceException;
-import io.swagger.model.Account;
-import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
-import java.util.concurrent.ExecutionException;
-
-import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
+import org.threeten.bp.OffsetDateTime;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Transaction
@@ -65,11 +60,46 @@ public class Transaction   {
     this.setTimestamp(OffsetDateTime.now());
   }
 
-  public Boolean isValid() {
-    if (this.getTimestamp() == null && this.getAccountFrom().getBalance().compareTo(this.getAmount()) > 0 ) {
+//  Check if balance is sufficient
+  public Boolean hasSufficientBalance() {
+
+    if (this.getAccountFrom().getBalance().compareTo(this.getAmount()) > 0) {
       return true;
     }
     return false;
+  }
+
+//  Check if amount is below transaction limit
+  public Boolean isBelowTransactionLimit() {
+     if (this.getAmount().compareTo(this.getUserPerforming().getTransactionLimit()) > 0) {
+       return true;
+     }
+     return false;
+  }
+
+//  Returns false if one account is a savings account and the owners don't match
+  public Boolean accountsValid() {
+    if (this.getAccountFrom().getAccountType() == AccountType.SAVINGS || this.getAccountTo().getAccountType() == AccountType.SAVINGS) {
+      if (this.getAccountFrom().getUser() != this.getAccountTo().getUser()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public BigDecimal getDailySum(List<Transaction> userTransactions) {
+
+//    Sum up all transactions within last day
+    BigDecimal dailySum = userTransactions.stream()
+            .map(transaction -> {
+
+              if (transaction.timestamp.isAfter(OffsetDateTime.now().minusDays(1))) {
+                return transaction.getAmount();
+              }
+              return BigDecimal.ZERO;
+            }).reduce(BigDecimal.ZERO,BigDecimal::add);
+
+    return dailySum;
   }
   /**
    * Get id

@@ -26,7 +26,7 @@ public class CreateTransactionDto   {
   private String toIban = null;
 
   @Min(value=0, message = "Amount cannot be negative.")
-  @Max(value=1000000, message = "Maximum amount per transaction is 1,000,000 usd.")
+  @Max(value=1000000, message = "Maximum amount per transaction is 1,000,000 EUR.")
   @Digits(fraction = 2, integer=10, message = "Amount can have at most 2 decimal places.")
   @NotNull(message = "Amount must be specified.")
   @JsonProperty("amount")
