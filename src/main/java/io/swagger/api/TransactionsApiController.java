@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,7 +57,7 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
     public ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateTransactionDto body) {
-//    TODO: check daily limit
+//      TODO: check daily limit
         Transaction transaction = createTransactionFromDto(body);
         transactionService.addTransaction(transaction);
         return new ResponseEntity<Void>(HttpStatus.OK);
@@ -76,33 +75,27 @@ public class TransactionsApiController implements TransactionsApi {
 
     public ResponseEntity<List<PublicTransactionDto>> getTransactions(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
 
-        UserRoles currentRoles = CurrentUserInfo.getCurrentUserRoles();
-
-        List<PublicTransactionDto> dtoList = new ArrayList<>();
         List<Transaction> transactions = transactionService.getTransactions();
-        transactions.forEach(trans -> dtoList.add(convertToDto(trans)));
+        List<PublicTransactionDto> dtoList = new ArrayList<>();
+        transactions.forEach(transaction -> dtoList.add(convertToDto(transaction)));
 
         Long currentUserId = CurrentUserInfo.getCurrentUserId();
         Iterator iterator = dtoList.iterator();
 
-        if (currentRoles.stream().noneMatch(Role.EMPLOYEE::equals)) {
+//        If current user is not an employee
+        if (! CurrentUserInfo.isEmployee()) {
             while (iterator.hasNext()) {
                 PublicTransactionDto transaction = (PublicTransactionDto) iterator.next();
-                System.out.println("customer ids:" + transaction.getUserPerforming().getId() + " current: " + currentUserId);
 
+//                Remove transaction from list if current user is not the performing user
                 if (! transaction.getUserPerforming().getId().equals(currentUserId)) {
-                    System.out.println("remove");
                     iterator.remove();
                 }
             }
         }
-
-        Transaction last = transactions.get(transactions.size()-1);
-        BigDecimal daily = last.getDailySum(transactions);
-        System.out.println("DAILY SUM:" + daily);
-
         return new ResponseEntity<List<PublicTransactionDto>>(dtoList, HttpStatus.OK);
     }
+
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Void> updateTransaction(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ModifyTransactionDto body) {
         Transaction transaction = transactionService.getTransactionById(transactionId);
@@ -139,7 +132,6 @@ public class TransactionsApiController implements TransactionsApi {
         fromAccount = accountService.getAccountByIban(createTransaction.getFromIban());
         toAccount = accountService.getAccountByIban(createTransaction.getToIban());
 
-
         User currentUser = userService.getUserById(CurrentUserInfo.getCurrentUserId());
 
         transaction.setAccountFrom(fromAccount);
@@ -166,7 +158,6 @@ public class TransactionsApiController implements TransactionsApi {
         }
 
         return transaction;
-
     }
 
     private PublicTransactionDto convertToDto(Transaction transaction) {
