@@ -84,10 +84,10 @@ public class AccountsApiController implements AccountsApi {
         return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
-        return new ResponseEntity<List<Account>>(accountService.getAccounts(),HttpStatus.OK);
+    public ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue="0") Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit) {
+        List<Account> accounts = accountService.getAccounts();
+        return new ResponseEntity<List<Account>>(accounts.subList(Math.min(accounts.size(), offset),Math.min(accounts.size(), offset + limit)),HttpStatus.OK);
     }
-
     public ResponseEntity<Void> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyAccountDto body) {
         String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
