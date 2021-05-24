@@ -7,7 +7,7 @@ import io.swagger.model.Role;
 import io.swagger.model.Transaction;
 import io.swagger.model.User;
 import io.swagger.model.UserRoles;
-import io.swagger.security.jwt.JwtResponse;
+import io.swagger.model.JwtResponse;
 import io.swagger.service.AccountService;
 import io.swagger.service.TransactionService;
 import io.swagger.service.UserService;
@@ -131,6 +131,14 @@ public class TransactionsApiControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(String.format("{\"fromIban\": \"%s\", \"toIban\": \"%s\", \"amount\": \"100\"}",testIban1, testIban2)))
             .andExpect(status().isOk());
+
+        MvcResult res = mvc.perform(post("/transactions")
+                .header("Authorization", "Bearer " + this.jwtToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.format("{\"fromIban\": \"%s\", \"toIban\": \"%s\", \"amount\": \"100\"}",testIban1, testIban1)))
+                .andExpect(status().is4xxClientError()).andReturn();
+        System.out.println(res);
+        System.out.println("asd");
     }
 
     @Test

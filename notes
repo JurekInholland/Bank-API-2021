@@ -5,3 +5,20 @@ https://www.baeldung.com/spring-dataIntegrityviolationexception#cause-1
 JWT Auth
 https://bezkoder.com/spring-boot-jwt-authentication/
 https://github.com/bezkoder/spring-boot-spring-security-jwt-authentication/
+
+
+TODO:
+
+user:
+
+PUT: user update check if is self
+
+POST: createUser only as employee
+DELETE: deleteUser only as employee
+
+
+account:
+
+PUT: updateAccount check if owner is self
+
+POST:
