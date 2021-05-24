@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.api.exception.AccountNotFoundException;
 import io.swagger.model.Account;
 import io.swagger.model.CreateAccountDto;
 import io.swagger.model.ModifyAccountDto;
@@ -71,17 +72,12 @@ public class AccountsApiController implements AccountsApi {
     }
 
     public ResponseEntity<Account> getAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Account>(objectMapper.readValue("{\n  \"balance\" : 0.8008281904610115,\n  \"iban\" : \"NLxxINHO0xxxxxxxxx\",\n  \"accountType\" : \"current\",\n  \"user\" : {\n    \"firstName\" : \"firstName\",\n    \"lastName\" : \"lastName\",\n    \"emailAddress\" : \"\",\n    \"password\" : \"\",\n    \"phoneNumber\" : \"phoneNumber\",\n    \"role\" : \"customer\",\n    \"id\" : 0\n  }\n}", Account.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        try {
+            Account account = accountService.getAccountByIban(iban);
+            return new ResponseEntity<Account>(account, HttpStatus.OK);
+        } catch (AccountNotFoundException e) {
+            return new ResponseEntity<Account>(HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue="0") Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue="100") Integer limit) {
