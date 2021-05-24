@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,7 +17,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 
-public class CreateAccountDto   {
+public class CreateAccountDto {
 
 
   @JsonProperty("iban")
@@ -24,6 +25,9 @@ public class CreateAccountDto   {
 
   @JsonProperty("userId")
   private Integer userId = null;
+
+  @JsonProperty("balance")
+  private BigDecimal balance = null;
 
   @JsonProperty("accountType")
   private AccountType accountType = null;
@@ -88,6 +92,20 @@ public class CreateAccountDto   {
     this.accountType = accountType;
   }
 
+  /**
+   * Get balance
+   * @return balance
+   **/
+  @Schema(required = true, description = "")
+  @NotNull
+
+  public BigDecimal getBalance() {
+    return balance;
+  }
+
+  public void setBalance(BigDecimal balance) {
+    this.balance = balance;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
