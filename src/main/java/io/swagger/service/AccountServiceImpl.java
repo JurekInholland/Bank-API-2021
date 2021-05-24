@@ -2,19 +2,14 @@ package io.swagger.service;
 
 import io.swagger.api.exception.AccountNotFoundException;
 import io.swagger.model.Account;
-import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-// TODO: This is breaking the application
-/*
 
- */
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;

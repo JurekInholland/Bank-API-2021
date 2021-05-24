@@ -2,9 +2,7 @@ package io.swagger.configuration;
 
 import io.swagger.model.*;
 import io.swagger.repository.UserRepository;
-import io.swagger.service.AccountService;
-import io.swagger.service.TransactionService;
-import io.swagger.service.UserService;
+import io.swagger.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -24,11 +22,15 @@ public class BankApiApplicationRunner implements ApplicationRunner
     private UserService userService;
 
     @Autowired
-    private AccountService accountservice;
+    private AccountService accountService;
+
+    @Autowired
+    private IbanService ibanService;
 
     @Autowired
     private TransactionService transactionService;
 
+    
     @Override
     public void run(ApplicationArguments args) throws Exception
     {
@@ -74,13 +76,12 @@ public class BankApiApplicationRunner implements ApplicationRunner
 
 
                 // Add IBAN and User to account
-                Iban iban = new Iban();
                 accountList.add(
-                    new Account(iban.generateUniqueIban(), user, accountBalance, AccountType.CURRENT)
+                    new Account(ibanService.generateUniqueIban(), user, accountBalance, AccountType.CURRENT)
                 );
             }
         }
-        accountservice.addAccount(accountList);
+        accountService.addAccount(accountList);
         Transaction testTransaction = new Transaction();
         testTransaction.setAmount(BigDecimal.valueOf(25.25));
         testTransaction.setTimestamp(OffsetDateTime.now());
