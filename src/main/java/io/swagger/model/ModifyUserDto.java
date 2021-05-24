@@ -27,14 +27,14 @@ public class ModifyUserDto   {
   private String phoneNumber;
   private String emailAddress;
   private String password;
-  private Role role;
+  private UserRoles roles;
 
-  public ModifyUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String emailAddress, @NonNull String password, @NonNull Role role) {
+  public ModifyUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String emailAddress, @NonNull String password, @NonNull UserRoles roles) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
     this.emailAddress = emailAddress;
     this.password = password;
-    this.role = role;
+    this.roles = roles;
   }
 }

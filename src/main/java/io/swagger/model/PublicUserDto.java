@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
 
 public class PublicUserDto   {
   @JsonProperty("id")
-  private Integer id = null;
+  private Long id = null;
 
   @JsonProperty("firstName")
   private String firstName = null;
@@ -25,7 +25,7 @@ public class PublicUserDto   {
   @JsonProperty("lastName")
   private String lastName = null;
 
-  public PublicUserDto id(Integer id) {
+  public PublicUserDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -36,11 +36,11 @@ public class PublicUserDto   {
    **/
   @Schema(description = "")
   
-    public Integer getId() {
+    public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

@@ -37,6 +37,9 @@ public class Account   {
   @JsonProperty("accountType")
   private AccountType accountType = null;
 
+  @JsonProperty("absoluteLimit")
+  private BigDecimal absoluteLimit = new BigDecimal(0);
+
   public Account iban(String iban) {
     this.iban = iban;
     return this;
@@ -129,6 +132,25 @@ public class Account   {
   public void setAccountType(AccountType accountType) {
     this.accountType = accountType;
   }
+
+
+
+  /**
+   * Balance cannot become lower than a certain number defined per account, referred to as absolute limit
+   * @return absoluteLimit
+   **/
+  @Schema(description = "Balance cannot become lower than a certain number defined per account, referred to as absolute limit")
+
+  @Valid
+  public BigDecimal getAbsoluteLimit() {
+    return absoluteLimit;
+  }
+
+  public void setAbsoluteLimit(BigDecimal absoluteLimit) {
+    this.absoluteLimit = absoluteLimit;
+  }
+
+
 
 
   @Override

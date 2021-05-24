@@ -49,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountByIban(String iban) {
-        return accountRepository.findById(iban).orElseThrow(AccountNotFoundException::new);
+        return accountRepository.findById(iban).orElseThrow(() -> new AccountNotFoundException(iban));
     }
 
 }
