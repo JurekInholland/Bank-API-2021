@@ -13,7 +13,7 @@
     "url" : "https://virtserver.swaggerhub.com/project-group/bank-api-2021/1.0.0",
     "description" : "Bank API Project"
   }, {
-    "url" : "https://petstore.swagger.io/v2"
+    "url" : "https://app.swaggerhub.com/apis/project-group/bank-api-2021/1.0.0"
   } ],
   "security" : [ {
     "bearerAuth" : [ ]
@@ -40,7 +40,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/LoginToken"
+                  "$ref" : "#/components/schemas/JwtResponse"
                 }
               }
             }
@@ -413,7 +413,10 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PublicTransactionDto"
+                  }
                 }
               }
             }
@@ -443,7 +446,14 @@
             "description" : "Transaction created successfully"
           },
           "400" : {
-            "description" : "Invalid request, transaction not created"
+            "description" : "Unexpected error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -561,6 +571,11 @@
           },
           "accountType" : {
             "$ref" : "#/components/schemas/AccountType"
+          },
+          "absoluteLimit" : {
+            "type" : "number",
+            "description" : "Balance cannot become lower than a certain number defined per account, referred to as absolute limit",
+            "default" : 0
           }
         }
       },
@@ -611,7 +626,7 @@
         }
       },
       "User" : {
-        "required" : [ "emailAddress", "firstName", "id", "lastName", "password", "phoneNumber", "role" ],
+        "required" : [ "emailAddress", "firstName", "id", "lastName", "password", "phoneNumber", "roles" ],
         "type" : "object",
         "properties" : {
           "id" : {
@@ -635,8 +650,18 @@
             "type" : "string",
             "format" : "password"
           },
-          "role" : {
-            "$ref" : "#/components/schemas/Role"
+          "dailyLimit" : {
+            "type" : "number",
+            "description" : "The cumulative value of transactions occurring on a day cannot surpass a certain number defined per user, referred to as day limit",
+            "default" : 10000
+          },
+          "transactionLimit" : {
+            "type" : "number",
+            "description" : "The maximum amount per transaction cannot be higher than a certain number defined per user, referred to as transaction limit",
+            "default" : 2000
+          },
+          "roles" : {
+            "$ref" : "#/components/schemas/UserRoles"
           }
         }
       },
@@ -694,8 +719,8 @@
             "type" : "string",
             "format" : "password"
           },
-          "role" : {
-            "$ref" : "#/components/schemas/Role"
+          "roles" : {
+            "$ref" : "#/components/schemas/UserRoles"
           }
         }
       },
@@ -703,7 +728,8 @@
         "type" : "object",
         "properties" : {
           "id" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format" : "int64"
           },
           "firstName" : {
             "type" : "string"
@@ -724,12 +750,25 @@
           }
         }
       },
-      "LoginToken" : {
-        "required" : [ "authtoken" ],
+      "JwtResponse" : {
+        "required" : [ "token" ],
         "properties" : {
-          "authtoken" : {
+          "token" : {
             "type" : "string",
             "example" : "xx508xx63817x752xx74004x30705xx92x58349x5x78f5xx34xxxxx51"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "roles" : {
+            "$ref" : "#/components/schemas/UserRoles"
           }
         }
       },
@@ -816,6 +855,12 @@
           }
         }
       },
+      "UserRoles" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Role"
+        }
+      },
       "Role" : {
         "type" : "string",
         "enum" : [ "customer", "employee" ]
@@ -824,18 +869,17 @@
         "type" : "string",
         "enum" : [ "current", "savings" ]
       },
-      "inline_response_200" : {
-        "oneOf" : [ {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/components/schemas/PublicTransactionDto"
+      "Error" : {
+        "required" : [ "code", "message" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
           }
-        }, {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/components/schemas/Transaction"
-          }
-        } ]
+        }
       }
     },
     "securitySchemes" : {
