@@ -30,7 +30,6 @@ public class BankApiApplicationRunner implements ApplicationRunner
     @Autowired
     private TransactionService transactionService;
 
-    
     @Override
     public void run(ApplicationArguments args) throws Exception
     {
@@ -50,16 +49,13 @@ public class BankApiApplicationRunner implements ApplicationRunner
         );
         users.forEach(user -> userService.addUser(user));
 
-        // Seed accounts
-        List<Account> accountList = new ArrayList<Account>();
-
         // Add fixed accounts for debugging
         Account fixedAccount1 = new Account("TESTIBAN01", users.get(0), BigDecimal.valueOf(1000.20), AccountType.CURRENT);
         Account fixedAccount2 = new Account("TESTIBAN02", users.get(1), BigDecimal.valueOf(500.50), AccountType.CURRENT);
-        accountList.add(fixedAccount1);
-        accountList.add(fixedAccount2);
+        accountService.addAccount(fixedAccount1);
+        accountService.addAccount(fixedAccount2);
 
-
+        // Create bank accounts for users
         for (User user : users) {
 
             // Generate between 1-4 accounts per User
@@ -74,21 +70,20 @@ public class BankApiApplicationRunner implements ApplicationRunner
                 high = 3000;
                 BigDecimal accountBalance = BigDecimal.valueOf(rand.nextInt(high-low) + low);
 
-
                 // Add IBAN and User to account
-                accountList.add(
+                accountService.addAccount(
                     new Account(ibanService.generateUniqueIban(), user, accountBalance, AccountType.CURRENT)
                 );
             }
         }
-        accountService.addAccount(accountList);
+
+        // Add transactions to bank accounts
         Transaction testTransaction = new Transaction();
         testTransaction.setAmount(BigDecimal.valueOf(25.25));
         testTransaction.setTimestamp(OffsetDateTime.now());
-        testTransaction.setAccountFrom(accountList.get(0));
-        testTransaction.setAccountTo((accountList.get(1)));
+        testTransaction.setAccountFrom(accountService.getRandomAccount());
+        testTransaction.setAccountTo(accountService.getRandomAccount());
         testTransaction.setUserPerforming(users.get(0));
         transactionService.addTransaction(testTransaction);
-
     }
 }

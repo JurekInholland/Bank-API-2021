@@ -1,7 +1,10 @@
 package io.swagger.service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import io.swagger.api.exception.AccountNotFoundException;
+import io.swagger.model.Account;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 
 public class IbanServiceImpl implements IbanService{
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -42,7 +46,8 @@ public class IbanServiceImpl implements IbanService{
     public String generateUniqueIban() {
         String iban = this.generateIban();
 
-        while (!this.isUnique(iban)) {
+        while (!this.isUnique(iban))
+        {
             iban = this.generateIban();
         }
 
@@ -51,7 +56,9 @@ public class IbanServiceImpl implements IbanService{
 
     @Override
     public boolean isUnique(String iban) {
-        // TODO: Call account service and check IBAN
-        return false;
+        Optional<Account> account = accountRepository.findById(iban);
+        boolean isUnique = !account.isPresent();
+
+        return isUnique;
     }
 }
