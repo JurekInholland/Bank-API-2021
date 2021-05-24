@@ -32,13 +32,8 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
-    }
-
     public String getEmailFromJwtToken(String token) {
         Claims test = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        System.out.println("getEmailFromToken:" + test);
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -57,7 +52,6 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
     }
 }

@@ -37,6 +37,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionRepository.findById(id) != null) {
             transactionRepository.deleteById(id);
         }
+        else throw new TransactionNotFoundException(id);
 
     }
 
