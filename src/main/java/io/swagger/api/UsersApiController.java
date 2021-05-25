@@ -93,6 +93,7 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<>(publicUsers.subList(Math.min(users.size(), offset),Math.min(users.size(), offset + limit)),HttpStatus.OK);
     }
 
+
     public ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body) {
 
         if(! CurrentUserInfo.isEmployee()) {
@@ -115,8 +116,8 @@ public class UsersApiController implements UsersApi {
         User user = modelMapper.map(modifyUserDto, User.class);
         return user;
     }
+
 //    Convert User to PublicUserDto
-//
     private PublicUserDto convertToPublicDto(User user) {
         PublicUserDto publicUser = modelMapper.map(user, PublicUserDto.class);
         return publicUser;
