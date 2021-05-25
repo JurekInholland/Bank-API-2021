@@ -6,6 +6,7 @@ import io.swagger.model.PublicUserDto;
 import io.swagger.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.service.UserService;
+import io.swagger.util.CurrentUserInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -94,6 +95,12 @@ public class UsersApiController implements UsersApi {
 
     public ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body) {
 
+        if(! CurrentUserInfo.isEmployee()) {
+            if(Long.parseLong(userid.toString()) != CurrentUserInfo.getCurrentUserId()) {
+                throw new RuntimeException("You are not allowed to edit this user.");
+            }
+        }
+        
         userService.updateUser(body,userid);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

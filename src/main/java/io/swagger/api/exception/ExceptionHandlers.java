@@ -1,5 +1,6 @@
 package io.swagger.api.exception;
 
+import io.swagger.api.ApiException;
 import io.swagger.model.Error;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,13 @@ public class ExceptionHandlers {
     @ResponseBody
     public Error handleUserNotFoundException(final UserNotFoundException ex) {
         return new Error("USER_NOT_FOUND", "The user was not found");
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleApiException(final ApiException ex){
+        return new Error("BAD_REQUEST", ex.getMessage());
     }
 
     @ExceptionHandler(EmptyBodyException.class)
