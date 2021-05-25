@@ -63,8 +63,8 @@ public class AccountsApiController implements AccountsApi {
     }
 
     public ResponseEntity<Void> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "The iban account to delete", required=true, schema=@Schema()) @PathVariable("iban") String iban) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        accountService.deleteAccountByIban(iban);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Account> getAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban) {
@@ -82,7 +82,19 @@ public class AccountsApiController implements AccountsApi {
     }
     public ResponseEntity<Void> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyAccountDto body) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+
+        if (accept != null && accept.contains("application/json")) {
+            try {
+                Account account = modelMapper.map(body, Account.class);
+                accountService.updateAccountByIban(body, iban);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -2,6 +2,7 @@ package io.swagger.service;
 
 import io.swagger.api.exception.AccountNotFoundException;
 import io.swagger.model.Account;
+import io.swagger.model.ModifyAccountDto;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,5 +63,15 @@ public class AccountServiceImpl implements AccountService {
         Account randomAccount = accountList.get(randomIndex);
 
         return randomAccount;
+    }
+
+    @Override
+    public void deleteAccountByIban(String iban) {
+        accountRepository.deleteById(iban);
+    }
+
+    @Override
+    public void updateAccountByIban(ModifyAccountDto modifyAccountDto, String iban) {
+        accountRepository.updateAccountByIban(modifyAccountDto.getIban(), modifyAccountDto.getBalance(), modifyAccountDto.getAccountType(), modifyAccountDto.getUserId());
     }
 }
