@@ -59,23 +59,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean updateAccountByIban(Account newAccount, String iban) {
-
-        Optional<Account> updateAccount = accountRepository.findById(iban);
-
-        if (updateAccount.isPresent()) {
-
-            Account account = updateAccount.get();
-            account.setBalance(newAccount.getBalance());
-            account.setAccountType(newAccount.getAccountType());
-            account.setUser(newAccount.getUser());
-            accountRepository.save(account);
-
-            return true;
-        } else {
-            return false;
-        }
-
-
+        accountRepository.save(newAccount);
+        return true;
     }
 
 }

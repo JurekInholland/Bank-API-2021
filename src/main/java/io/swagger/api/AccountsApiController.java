@@ -5,7 +5,9 @@ import io.swagger.api.exception.AccountNotFoundException;
 import io.swagger.model.Account;
 import io.swagger.model.CreateAccountDto;
 import io.swagger.model.ModifyAccountDto;
+import io.swagger.model.User;
 import io.swagger.service.AccountService;
+import io.swagger.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,6 +33,9 @@ public class AccountsApiController implements AccountsApi {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -85,21 +90,26 @@ public class AccountsApiController implements AccountsApi {
         String accept = request.getHeader("Accept");
 
         if (accept != null && accept.contains("application/json")) {
-            try {
-                Account account = modelMapper.map(body, Account.class);
-                boolean update = accountService.updateAccountByIban(account, iban);
-                if (update){
-                  return new ResponseEntity<Void>(HttpStatus.OK);
-                }
-                else {
-                    return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-            }
+            Account account = accountFromDto(body, iban);
+
+            boolean update = accountService.updateAccountByIban(account, iban);
+            return new ResponseEntity<Void>(HttpStatus.OK);
         }
         return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     }
 
+    private Account accountFromDto(ModifyAccountDto modifyAccountDto, String iban) {
+        Account oldAccount = accountService.getAccountByIban(iban);
+        if (modifyAccountDto.getBalance() != null) {
+            oldAccount.setBalance(modifyAccountDto.getBalance());
+        }
+        if (modifyAccountDto.getAccountType() != null) {
+            oldAccount.setAccountType(modifyAccountDto.getAccountType());
+        }
+        if (modifyAccountDto.getUserId() != null) {
+            User newUser = userService.getUserById(modifyAccountDto.getUserId());
+            oldAccount.setUser(newUser);
+        }
+        return oldAccount;
+    }
 }
