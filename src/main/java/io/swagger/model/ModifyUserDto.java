@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.util.Collection;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -9,6 +10,10 @@ import lombok.Data;
 import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -27,9 +32,12 @@ public class ModifyUserDto   {
   private String phoneNumber;
   private String emailAddress;
   private String password;
-  private UserRoles roles;
 
-  public ModifyUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String emailAddress, @NonNull String password, @NonNull UserRoles roles) {
+  @Enumerated(EnumType.STRING)
+  @ElementCollection(targetClass = Role.class)
+  private Collection<Role> roles;
+
+  public ModifyUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String emailAddress, @NonNull String password, @NonNull Collection<Role> roles) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;

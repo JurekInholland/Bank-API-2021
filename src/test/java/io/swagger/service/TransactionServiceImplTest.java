@@ -5,7 +5,6 @@ import io.swagger.model.AccountType;
 import io.swagger.model.Role;
 import io.swagger.model.Transaction;
 import io.swagger.model.User;
-import io.swagger.model.UserRoles;
 import io.swagger.repository.TransactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +36,8 @@ class TransactionServiceImplTest {
     private Account testAccountFrom;
     private Account testAccountTo;
 
+    private ArrayList<Role> roles = new ArrayList<>();
+
     @Mock
     private TransactionRepository transactionRepository;
 
@@ -51,7 +52,8 @@ class TransactionServiceImplTest {
     @BeforeEach
     public void setup() {
 
-        User u = new User("testuser111","testln","12345","testuser1@example.com","secret", new UserRoles(Role.EMPLOYEE));
+        roles.add(Role.EMPLOYEE);
+        User u = new User("testuser111","testln","12345","testuser1@example.com","secret", roles);
 
         testUser = u;
         testAccountFrom = new Account(testIban1, testUser, BigDecimal.valueOf(1000), AccountType.CURRENT);
