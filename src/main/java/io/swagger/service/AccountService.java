@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.model.Account;
+import io.swagger.model.ModifyAccountDto;
 
 import java.util.List;
 
@@ -10,4 +11,7 @@ public interface AccountService
     List<Account>  addAccount(List<Account> accountList);
     List<Account> getAccounts();
     Account getAccountByIban(String iban);
+    void deleteAccountByIban(String iban);
+    void updateAccountByIban(ModifyAccountDto modifyAccountDto, String iban);
+
 }
