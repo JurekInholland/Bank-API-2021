@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 //https://github.com/spring-framework-guru/sfg-blog-posts/blob/master/testingspringbootrestfulservice/src/test/java/com/springframeworkguru/Service/ProductServiceTest.java
@@ -80,6 +81,22 @@ public class AccountServiceImplTest {
         when(accountRepository.findById("NL05")).thenReturn(java.util.Optional.ofNullable(testAccount));
         Account account = accountService.getAccountByIban("NL05");
         assertEquals(account, testAccount);
+    }
+
+    @Test
+    public void deleteAccountByIban(){
+        testUser.setId(0L);
+        accountRepository.save(testAccount);
+        accountService.deleteAccountByIban("NL05");
+        List<Account> accountL = accountService.getAccounts();
+        System.out.println("tl"+accountL);
+    }
+
+    @Test
+    public void updateAccountByIban(){
+
+        accountService.updateAccountByIban(modifyAccount, "NL05");
+        assertNotNull(modifyAccount);
     }
 
 }
