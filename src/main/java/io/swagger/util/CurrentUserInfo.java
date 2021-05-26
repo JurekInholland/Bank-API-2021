@@ -1,9 +1,10 @@
 package io.swagger.util;
 
 import io.swagger.model.Role;
-import io.swagger.model.UserRoles;
 import io.swagger.security.services.UserDetailsImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.ArrayList;
 
 // Helper class to quickly access current user info
 public class CurrentUserInfo {
@@ -16,10 +17,11 @@ public class CurrentUserInfo {
         return false;
     }
 
-    public static UserRoles getCurrentUserRoles() {
+    public static ArrayList<Role> getCurrentUserRoles() {
         UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserRoles roles = new UserRoles();
+        ArrayList<Role> roles = new ArrayList<>();
+
 
         userDetails.getAuthorities().forEach(auth -> {
             roles.add(Role.valueOf(auth.getAuthority().replace("ROLE_","")));

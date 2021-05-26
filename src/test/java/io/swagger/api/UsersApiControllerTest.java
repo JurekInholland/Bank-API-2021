@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,6 +38,8 @@ public class UsersApiControllerTest {
     private static final String emailAddress = "example@test.nl";
     private static final String password = "examplePassword";
     private static final Role role = Role.CUSTOMER;
+
+    private static final ArrayList<Role> roles = new ArrayList<>();
 
     @Autowired
     private MockMvc mvc;
@@ -63,13 +66,15 @@ public class UsersApiControllerTest {
     private String jwtToken;
 
     public User createMockUser() {
-        User u = new User("testuser","testln","12345","testuser@example.com",encoder.encode("secret"), new UserRoles(Role.EMPLOYEE));
+
+        roles.add(Role.EMPLOYEE);
+        User u = new User("testuser","testln","12345","testuser@example.com",encoder.encode("secret"), roles);
 
         return userService.addUser(u);
     }
 
     public User createTestUser() {
-        User u = new User(firstName,lastName,phoneNumber,emailAddress,encoder.encode(password), new UserRoles(Role.EMPLOYEE));
+        User u = new User(firstName,lastName,phoneNumber,emailAddress,encoder.encode(password), roles);
         return userService.addUser(u);
 
     }
