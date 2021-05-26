@@ -6,7 +6,6 @@ import io.swagger.model.Account;
 import io.swagger.model.AccountType;
 import io.swagger.model.Role;
 import io.swagger.model.User;
-import io.swagger.model.UserRoles;
 import io.swagger.model.JwtResponse;
 import io.swagger.service.AccountService;
 import io.swagger.service.UserService;
@@ -25,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.threeten.bp.OffsetDateTime;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +44,7 @@ class AccountsApiControllerTest {
     //private static final BigDecimal ballance = new BigDecimal("1000.40");
     private static final AccountType accountType1 = AccountType.CURRENT;
     private static final AccountType accountType2 = AccountType.SAVINGS;
-
+    private static final ArrayList<Role> roles = new ArrayList<>();
 
     @Autowired
     private MockMvc mvc;
@@ -71,7 +71,8 @@ class AccountsApiControllerTest {
     private String jwtToken;
 
     public User createMockUser() {
-        User u = new User("testuser","testln","12345","testuser@example.com",encoder.encode("secret"), new UserRoles(Role.EMPLOYEE));
+        roles.add(Role.EMPLOYEE);
+        User u = new User("testuser","testln","12345","testuser@example.com",encoder.encode("secret"), roles);
 
         return userService.addUser(u);
     }

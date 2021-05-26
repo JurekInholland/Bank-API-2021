@@ -3,7 +3,6 @@ package io.swagger.service;
 import io.swagger.model.ModifyUserDto;
 import io.swagger.model.Role;
 import io.swagger.model.User;
-import io.swagger.model.UserRoles;
 import io.swagger.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,13 +36,17 @@ public class UserServiceImplTest {
     private User testUser;
 
     List<User> userList = new ArrayList<>();
-    ModifyUserDto modifiedUser = new ModifyUserDto("testuser111", "testln", "555555", "testuser1@example.com", "secret", new UserRoles(Role.EMPLOYEE));
+
+    ModifyUserDto modifiedUser;
 
 
     @BeforeEach
     public void setup() {
 
-        User u = new User("testuser111", "testln", "12345", "testuser1@example.com", "secret", new UserRoles(Role.EMPLOYEE));
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(Role.EMPLOYEE);
+        User u = new User("testuser111", "testln", "12345", "testuser1@example.com", "secret", roles);
+        modifiedUser = new ModifyUserDto("testuser111", "testln", "555555", "testuser1@example.com", "secret", roles);
 
         testUser = u;
 //        testUser.setFirstName("TestUserFirst");
@@ -60,7 +63,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void createUser(){
+    public void addUser(){
 
         userRepository.save(testUser);
         when(userRepository.findAll()).thenReturn(userList);
@@ -69,18 +72,18 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void deleteUser(){
+    public void deleteUserById(){
 
-//        testUser.setId(0L);
-//        userRepository.save(testUser);
-//        userService.deleteUserById(0l);
-//        List<User> userL = userService.getUsers();
-//        System.out.println("tl"+userL);
+        testUser.setId(0L);
+        userRepository.save(testUser);
+        userService.deleteUserById(0l);
+        List<User> userL = userService.getUsers();
+        System.out.println("tl"+userL);
 
     }
 
     @Test
-    public void getUser(){
+    public void getUserById(){
 
         userRepository.save(testUser);
 
