@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 @RestController
@@ -86,14 +87,18 @@ public class AccountsApiController implements AccountsApi {
         if (accept != null && accept.contains("application/json")) {
             try {
                 Account account = modelMapper.map(body, Account.class);
-                accountService.updateAccountByIban(body, iban);
+                boolean update = accountService.updateAccountByIban(account, iban);
+                if (update){
+                  return new ResponseEntity<Void>(HttpStatus.OK);
+                }
+                else {
+                    return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+                }
             } catch (Exception e) {
                 log.error(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<Void>(HttpStatus.OK);
         }
-
         return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     }
 

@@ -2,6 +2,7 @@ package io.swagger.configuration;
 
 import io.swagger.model.*;
 import io.swagger.service.AccountService;
+import io.swagger.service.IbanService;
 import io.swagger.service.TransactionService;
 import io.swagger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,7 @@ public class BankApiApplicationRunner implements ApplicationRunner
                 );
             }
         }
-        accountservice.addAccount(accountList);
+        accountService.addAccount(accountList);
 
         Transaction testTransaction = new Transaction();
         testTransaction.setAmount(BigDecimal.valueOf(25.25));
