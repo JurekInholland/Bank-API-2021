@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,6 +38,8 @@ public class UsersApiControllerTest {
     private static final String emailAddress = "example@test.nl";
     private static final String password = "examplePassword";
     private static final Role role = Role.CUSTOMER;
+
+    private static final ArrayList<Role> roles = new ArrayList<>();
 
     @Autowired
     private MockMvc mvc;
@@ -63,13 +66,15 @@ public class UsersApiControllerTest {
     private String jwtToken;
 
     public User createMockUser() {
-        User u = new User("testuser","testln","12345","testuser@example.com",encoder.encode("secret"), new UserRoles(Role.EMPLOYEE));
+
+        roles.add(Role.EMPLOYEE);
+        User u = new User("testuser","testln","12345","testuser@example.com",encoder.encode("secret"), roles);
 
         return userService.addUser(u);
     }
 
     public User createTestUser() {
-        User u = new User(firstName,lastName,phoneNumber,emailAddress,encoder.encode(password), new UserRoles(Role.EMPLOYEE));
+        User u = new User(firstName,lastName,phoneNumber,emailAddress,encoder.encode(password), roles);
         return userService.addUser(u);
 
     }
@@ -115,19 +120,19 @@ public class UsersApiControllerTest {
     @Test
     void createUser() throws Exception{
 
-//        mvc.perform(post("/users")
-//                .header("Authorization", "Bearer " + this.jwtToken)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName, lastName, phoneNumber, emailAddress,password,role)))
-//                .andExpect(status().isOk());
-//
-//        MvcResult res = mvc.perform(post("/users")
-//                .header("Authorization", "Bearer " + this.jwtToken)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName,lastName, phoneNumber, emailAddress,password,role)))
-//                .andExpect(status().is4xxClientError()).andReturn();
-//        System.out.println(res);
-//        System.out.println("asd");
+        mvc.perform(post("/users")
+                .header("Authorization", "Bearer " + this.jwtToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName, lastName, phoneNumber, emailAddress,password,role)))
+                .andExpect(status().isOk());
+
+        MvcResult res = mvc.perform(post("/users")
+                .header("Authorization", "Bearer " + this.jwtToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName,lastName, phoneNumber, emailAddress,password,role)))
+                .andExpect(status().is4xxClientError()).andReturn();
+        System.out.println(res);
+        System.out.println("asd");
         
     }
 
@@ -143,28 +148,28 @@ public class UsersApiControllerTest {
 
     @Test
     void getUser() throws Exception {
-//        User mockUser = createMockUser();
-//
-//        mvc.perform((get("/users/" + mockUser.getId())
-//                .header("Authorization", "Bearer " + this.jwtToken))
-//        ).andExpect(status().isOk());
+        User mockUser = createTestUser();
+
+        mvc.perform((get("/users/" + mockUser.getId())
+                .header("Authorization", "Bearer " + this.jwtToken))
+        ).andExpect(status().isOk());
     }
 
     @Test
     void getUsers() throws Exception {
-//        mvc.perform((get("/users/")
-//                .header("Authorization", "Bearer " + this.jwtToken))
-//        ).andExpect(status().isOk());
+        mvc.perform((get("/users/")
+                .header("Authorization", "Bearer " + this.jwtToken))
+        ).andExpect(status().isOk());
     }
 
     @Test
     void updateUser() throws Exception {
-//        User mockUser = createMockUser();
-//
-//        mvc.perform((put("/users/" + mockUser.getId())
-//                .header("Authorization", "Bearer " + this.jwtToken))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName,lastName, phoneNumber, emailAddress,password,role)))
-//        .andExpect(status().isOk());
+        User mockUser = createTestUser();
+
+        mvc.perform((put("/users/" + mockUser.getId())
+                .header("Authorization", "Bearer " + this.jwtToken))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName,lastName, phoneNumber, emailAddress,password,role)))
+        .andExpect(status().isOk());
     }
 }
