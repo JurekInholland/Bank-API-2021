@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService
     {
         userRepository.updateUserById(
                 modifyUserDto.getFirstName(), modifyUserDto.getLastName(), modifyUserDto.getPhoneNumber(),
-                modifyUserDto.getEmailAddress(), modifyUserDto.getPassword(), modifyUserDto.getRole(),id);
+                modifyUserDto.getEmailAddress(), modifyUserDto.getPassword(), modifyUserDto.getRoles(),id);
     }
     public void deleteUserById(long id)
     {

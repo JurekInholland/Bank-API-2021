@@ -1,5 +1,7 @@
 package io.swagger.model;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,14 +32,21 @@ public class User
   private String phoneNumber;
   private String emailAddress;
   private String password;
-  private Role role;
+//  private UserRoles roles;
+  private BigDecimal dailyLimit = new BigDecimal(10000);
+  private BigDecimal transactionLimit = new BigDecimal(2000);
 
-  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Role role) {
+  @Enumerated(EnumType.STRING)
+  @ElementCollection(targetClass = Role.class)
+  private Collection<Role> roles;
+
+
+  public User(String firstName, String lastName, String phoneNumber, String emailAddress, String password, Collection<Role> roles) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
     this.emailAddress = emailAddress;
     this.password = password;
-    this.role = role;
+    this.roles = roles;
   }
 }

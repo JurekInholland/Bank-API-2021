@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.util.Collection;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,14 +32,17 @@ public class CreateUserDto   {
   private String phoneNumber;
   private String emailAddress;
   private String password;
-  private Role role;
 
-  public CreateUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @NonNull String emailAddress, @NonNull String password, @NonNull Role role) {
+  @Enumerated(EnumType.STRING)
+  @ElementCollection(targetClass = Role.class)
+  private Collection<Role> roles;
+
+  public CreateUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber, @NonNull String emailAddress, @NonNull String password, @NonNull Collection<Role> roles) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
     this.emailAddress = emailAddress;
     this.password = password;
-    this.role = role;
+    this.roles = roles;
   }
 }

@@ -5,7 +5,6 @@ import io.swagger.model.Account;
 import io.swagger.model.Transaction;
 import io.swagger.model.User;
 import io.swagger.repository.TransactionRepository;
-import io.swagger.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction getTransactionById(int id) {
-        return transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+        return transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFoundException(id));
     }
 
     @Override
@@ -38,11 +37,17 @@ public class TransactionServiceImpl implements TransactionService {
         if (transactionRepository.findById(id) != null) {
             transactionRepository.deleteById(id);
         }
+        else throw new TransactionNotFoundException(id);
 
     }
 
     @Override
     public List<Transaction> getTransactions() {
         return (List<Transaction>) transactionRepository.findAll();
+    }
+
+    @Override
+    public List<Transaction> getUserTransactions(User user) {
+        return transactionRepository.findByUserPerforming_Id(user.getId());
     }
 }

@@ -3,6 +3,7 @@ package io.swagger.service;
 import io.swagger.api.exception.AccountNotFoundException;
 import io.swagger.model.Account;
 import io.swagger.model.ModifyAccountDto;
+import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,22 +48,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountByIban(String iban) {
-        return accountRepository.findById(iban).orElseThrow(AccountNotFoundException::new);
-    }
-
-    @Override
-    public Account getRandomAccount() {
-        // TODO: This needs to be removed when we no longer need seeding
-        // Turn Iterator to List
-        List<Account> accountList = new ArrayList<>();
-        accountRepository.findAll().forEach(accountList::add);
-
-        // Retrieve a random Account from the list
-        Random rand = new Random();
-        Integer randomIndex = rand.nextInt(accountList.size());
-        Account randomAccount = accountList.get(randomIndex);
-
-        return randomAccount;
+        return accountRepository.findById(iban).orElseThrow(() -> new AccountNotFoundException(iban));
     }
 
     @Override
@@ -72,6 +58,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void updateAccountByIban(ModifyAccountDto modifyAccountDto, String iban) {
-        accountRepository.updateAccountByIban(modifyAccountDto.getIban(), modifyAccountDto.getBalance(), modifyAccountDto.getAccountType(), modifyAccountDto.getUserId());
+        accountRepository.updateAccountByIban(
+                modifyAccountDto.getIban(),
+                modifyAccountDto.getBalance(),
+                modifyAccountDto.getAccountType(),
+                modifyAccountDto.getUserId()
+        );
     }
+
 }
