@@ -1,7 +1,7 @@
 package io.swagger.service;
 
-import io.swagger.api.exception.InvalidRequestException;
 import io.swagger.api.exception.UserNotFoundException;
+import io.swagger.model.CreateUserDto;
 import io.swagger.model.ModifyUserDto;
 import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
@@ -10,10 +10,7 @@ import io.swagger.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.function.ToLongFunction;
 
 @Service
 public class UserServiceImpl implements UserService
@@ -31,8 +28,8 @@ public class UserServiceImpl implements UserService
 
     public User addUser(User user)
     {
-        userRepository.save(user);
-        return user;
+       userRepository.save(user);
+       return user;
     }
     public User getUserById(long id)
     {
@@ -44,33 +41,28 @@ public class UserServiceImpl implements UserService
     }
     public void updateUser(ModifyUserDto modifyUserDto, long id)
     {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
-        User u = userRepository.findById(id).orElseThrow(() -> new InvalidRequestException("User not found."));
-
-        if (modifyUserDto.getFirstName() != null) {
-            u.setFirstName(modifyUserDto.getFirstName());
+        if (modifyUserDto.getFirstName() != null && !modifyUserDto.getFirstName().isEmpty()) {
+            user.setFirstName(modifyUserDto.getFirstName());
         }
-        if (modifyUserDto.getLastName() != null) {
-            u.setLastName(modifyUserDto.getLastName());
-
+        if (modifyUserDto.getLastName() != null && !modifyUserDto.getLastName().isEmpty()) {
+            user.setLastName(modifyUserDto.getLastName());
         }
-        if (modifyUserDto.getEmailAddress() != null) {
-            u.setEmailAddress(modifyUserDto.getEmailAddress());
+        if (modifyUserDto.getEmailAddress() != null && !modifyUserDto.getEmailAddress().isEmpty()) {
+            user.setEmailAddress(modifyUserDto.getEmailAddress());
         }
-        if (modifyUserDto.getRoles() != null) {
-            u.setRoles(modifyUserDto.getRoles());
+        if (modifyUserDto.getRoles() != null && !modifyUserDto.getRoles().isEmpty()) {
+            user.setRoles(modifyUserDto.getRoles());
         }
-        if (modifyUserDto.getPassword() != null) {
-            u.setPassword(encoder.encode(modifyUserDto.getPassword()));
+        if (modifyUserDto.getPassword() != null && !modifyUserDto.getPassword().isEmpty()) {
+            user.setPassword(encoder.encode(modifyUserDto.getPassword()));
         }
-        if (modifyUserDto.getPhoneNumber() != null) {
-            u.setPassword(modifyUserDto.getPhoneNumber());
+        if (modifyUserDto.getPhoneNumber() != null && !modifyUserDto.getPhoneNumber().isEmpty()) {
+            user.setPassword(modifyUserDto.getPhoneNumber());
         }
 
-        userRepository.save(u);
-//        userRepository.updateUserById(
-//                modifyUserDto.getFirstName(), modifyUserDto.getLastName(), modifyUserDto.getPhoneNumber(),
-//                modifyUserDto.getEmailAddress(), modifyUserDto.getPassword(), modifyUserDto.getRoles(),id);
+        userRepository.save(user);
     }
     public void deleteUserById(long id)
     {
