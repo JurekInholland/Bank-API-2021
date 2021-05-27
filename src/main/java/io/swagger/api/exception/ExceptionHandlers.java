@@ -12,9 +12,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class ExceptionHandlers {
+
+    @ExceptionHandler(InvalidRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleInvalidRequestException(final InvalidRequestException ex) {
+        return new Error("INVALID_REQUEST", ex.getMessage());
+    }
+
+
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
@@ -26,7 +36,7 @@ public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error handleApiException(final ApiException ex){
-        return new Error("BAD_REQUEST", ex.getMessage());
+        return new Error("BAD_REQUEST", String.format("%s",ex.getMessage()));
     }
 
     @ExceptionHandler(EmptyBodyException.class)
@@ -110,14 +120,21 @@ public class ExceptionHandlers {
 
     }
 
-//    HANDLE NOT FOUND ERRORS
+    //    HANDLE INVALID URL PARAMETER
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException ex) {
+        return new Error("INVALID_REQUEST", ex.getMessage());
+    }
+
+    //    HANDLE NOT FOUND ERRORS
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error handleEmptyResultDataAccessException(final EmptyResultDataAccessException ex) {
         return new Error("NOT_FOUND_ERROR", ex.getMessage());
     }
-
 
 //    HANDLE JSON PARSE ERRORS
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -126,7 +143,6 @@ public class ExceptionHandlers {
     public Error handleHttpMessageNotReadableException(final HttpMessageNotReadableException ex) {
         return new Error("INVALID_JSON", ex.getMessage());
     }
-
 
 //    HANDLE ACCESS DENIED (employee only endpoint reached as user)
     @ExceptionHandler(AccessDeniedException.class)
