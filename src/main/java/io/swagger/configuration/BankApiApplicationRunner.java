@@ -54,8 +54,8 @@ public class BankApiApplicationRunner implements ApplicationRunner
 
         Collection<Role> roles = new ArrayList<>();
 
-//        roles.add(Role.CUSTOMER);
-        roles.add(Role.EMPLOYEE);
+        roles.add(Role.CUSTOMER);
+ //       roles.add(Role.EMPLOYEE);
 
 
         List<User> users = Arrays.asList

@@ -88,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean checkUserRole(String token, String iban) {
+    public boolean checkAuth(String token, String iban) {
         token = token.replace("Bearer ", ""); // Trim "Bearer" from token
         String tokenEmail = jwtUtils.getEmailFromJwtToken(token);
 
