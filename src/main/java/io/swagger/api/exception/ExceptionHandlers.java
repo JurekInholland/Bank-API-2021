@@ -128,7 +128,7 @@ public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error handleHttpMessageConversionException(final HttpMessageConversionException ex) {
-        return new Error("INVALID REQUEST",ex.getMessage());
+        return new Error("INVALID_REQUEST",ex.getMessage());
     }
 
 
