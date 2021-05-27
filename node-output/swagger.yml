@@ -481,7 +481,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/PublicTransactionDto"
+                  "$ref" : "#/components/schemas/Transaction"
                 }
               }
             }
