@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,11 +80,22 @@ public class AccountsApiController implements AccountsApi {
         }
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set", schema = @Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return", schema = @Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) {
         List<Account> accounts = accountService.getAccounts();
 
-        return new ResponseEntity<List<Account>>(accounts.subList(Math.min(accounts.size(), offset), Math.min(accounts.size(), offset + limit)), HttpStatus.OK);
+        List<Account> outputAccounts = new ArrayList<>();
+
+            accounts.forEach(account -> {
+
+                if (!CurrentUserInfo.isEmployee()) {
+                    if (account.getUser().getId().equals(CurrentUserInfo.getCurrentUserId())) {
+                        outputAccounts.add(account);
+                    } else {
+                        outputAccounts.add(account);
+                    }
+                }
+            });
+        return new ResponseEntity<List<Account>>(outputAccounts.subList(Math.min(outputAccounts.size(), offset), Math.min(outputAccounts.size(), offset + limit)), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody ModifyAccountDto body) {

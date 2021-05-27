@@ -22,9 +22,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private JwtUtils jwtUtils;
-
     /**
      * Add an account to the database.
      *
@@ -88,7 +85,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean checkAuth(String token, String iban) {
         token = token.replace("Bearer ", ""); // Trim "Bearer" from token
-        String tokenEmail = jwtUtils.getEmailFromJwtToken(token);
+        String tokenEmail = CurrentUserInfo.getCurrentUserEmail();
 
         try {
             Account account = this.getAccountByIban(iban);
