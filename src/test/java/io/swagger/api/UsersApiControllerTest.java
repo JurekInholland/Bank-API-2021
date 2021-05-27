@@ -39,7 +39,7 @@ public class UsersApiControllerTest {
     private static final String password = "examplePassword";
     private static final Role role = Role.CUSTOMER;
 
-    private static final ArrayList<Role> roles = new ArrayList<>();
+    private ArrayList<Role> roles = new ArrayList<>();
 
     @Autowired
     private MockMvc mvc;
@@ -123,13 +123,13 @@ public class UsersApiControllerTest {
         mvc.perform(post("/users")
                 .header("Authorization", "Bearer " + this.jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName, lastName, phoneNumber, emailAddress,password,role)))
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\"}",firstName, lastName, phoneNumber, emailAddress,password,role)))
                 .andExpect(status().isOk());
 
         MvcResult res = mvc.perform(post("/users")
                 .header("Authorization", "Bearer " + this.jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName,lastName, phoneNumber, emailAddress,password,role)))
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\"}",firstName,lastName, phoneNumber, emailAddress,password,role)))
                 .andExpect(status().is4xxClientError()).andReturn();
         System.out.println(res);
         System.out.println("asd");
@@ -169,7 +169,7 @@ public class UsersApiControllerTest {
         mvc.perform((put("/users/" + mockUser.getId())
                 .header("Authorization", "Bearer " + this.jwtToken))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\",}",firstName,lastName, phoneNumber, emailAddress,password,role)))
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\"}",firstName,lastName, phoneNumber, emailAddress,password,role)))
         .andExpect(status().isOk());
     }
 }
