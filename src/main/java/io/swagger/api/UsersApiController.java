@@ -57,7 +57,6 @@ public class UsersApiController implements UsersApi {
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateUserDto body) {
 
-        User test = convertToEntity(body);
         userService.addUser(convertToEntity(body));
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -94,7 +93,6 @@ public class UsersApiController implements UsersApi {
                 throw new RuntimeException("You are not allowed to edit this user.");
             }
         }
-        
         userService.updateUser(body,userid);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
