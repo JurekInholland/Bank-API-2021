@@ -580,15 +580,9 @@
         }
       },
       "CreateAccountDto" : {
-        "required" : [ "accountType", "userId" ],
+        "required" : [ "accountType" ],
         "type" : "object",
         "properties" : {
-          "iban" : {
-            "type" : "string"
-          },
-          "userId" : {
-            "type" : "integer"
-          },
           "accountType" : {
             "$ref" : "#/components/schemas/AccountType"
           }
@@ -597,12 +591,6 @@
       "ModifyAccountDto" : {
         "type" : "object",
         "properties" : {
-          "iban" : {
-            "type" : "string"
-          },
-          "balance" : {
-            "type" : "number"
-          },
           "accountType" : {
             "$ref" : "#/components/schemas/AccountType"
           },
@@ -622,6 +610,9 @@
           },
           "owner" : {
             "$ref" : "#/components/schemas/PublicUserDto"
+          },
+          "balance" : {
+            "type" : "number"
           }
         }
       },
@@ -776,7 +767,8 @@
         "required" : [ "accountFrom", "accountTo", "amount", "id", "timestamp", "userPerforming" ],
         "properties" : {
           "id" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format" : "int64"
           },
           "accountFrom" : {
             "$ref" : "#/components/schemas/Account"
@@ -800,7 +792,8 @@
         "required" : [ "accountFrom", "accountTo", "amount", "id", "timestamp", "userPerforming" ],
         "properties" : {
           "id" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format" : "int64"
           },
           "accountFrom" : {
             "$ref" : "#/components/schemas/PublicAccountDto"
@@ -847,7 +840,8 @@
             "type" : "number"
           },
           "performingUserId" : {
-            "type" : "integer"
+            "type" : "integer",
+            "format" : "int64"
           },
           "timestamp" : {
             "type" : "string",
