@@ -30,7 +30,7 @@ public class Transaction {
   @NotNull
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "t_seq")
-  private Integer id = null;
+  private Long id = null;
 
   @Schema(required = true, description = "")
   @NotNull

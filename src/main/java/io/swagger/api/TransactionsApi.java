@@ -9,6 +9,7 @@ import io.swagger.model.CreateTransactionDto;
 import io.swagger.model.Error;
 import io.swagger.model.ModifyTransactionDto;
 import io.swagger.model.PublicTransactionDto;
+import io.swagger.model.Transaction;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -72,7 +73,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions/{transactionId}",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<PublicTransactionDto> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId);
+    ResponseEntity<Transaction> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId);
 
 
     @Operation(summary = "List transactions", description = "getting a list of transactions", security = {

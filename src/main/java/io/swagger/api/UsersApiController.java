@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.api.exception.InvalidRequestException;
 import io.swagger.model.CreateUserDto;
 import io.swagger.model.ModifyUserDto;
 import io.swagger.model.PublicUserDto;
@@ -89,7 +90,7 @@ public class UsersApiController implements UsersApi {
 
         if(! CurrentUserInfo.isEmployee()) {
             if(Long.parseLong(userid.toString()) != CurrentUserInfo.getCurrentUserId()) {
-                throw new RuntimeException("You are not allowed to edit this user.");
+                throw new InvalidRequestException("You are not allowed to edit this user.");
             }
         }
         userService.updateUser(body,userid);
@@ -104,13 +105,8 @@ public class UsersApiController implements UsersApi {
 
         return user;
     }
-    private User convertToUpdateUserEntity(ModifyUserDto modifyUserDto)
-    {
-        User user = modelMapper.map(modifyUserDto, User.class);
-        return user;
-    }
+
 //    Convert User to PublicUserDto
-//
     private PublicUserDto convertToPublicDto(User user) {
         PublicUserDto publicUser = modelMapper.map(user, PublicUserDto.class);
         return publicUser;

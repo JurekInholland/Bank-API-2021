@@ -28,12 +28,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction getTransactionById(int id) {
+    public Transaction getTransactionById(long id) {
         return transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFoundException(id));
     }
 
     @Override
-    public void deleteTransactionById(int id) {
+    public void deleteTransactionById(long id) {
         if (transactionRepository.findById(id) != null) {
             transactionRepository.deleteById(id);
         }

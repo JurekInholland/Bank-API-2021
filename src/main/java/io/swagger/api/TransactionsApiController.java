@@ -62,6 +62,7 @@ public class TransactionsApiController implements TransactionsApi {
         this.request = request;
     }
 
+
     public ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateTransactionDto body) {
         Transaction transaction = createTransactionFromDto(body);
         validateTransaction(transaction);
@@ -77,8 +78,15 @@ public class TransactionsApiController implements TransactionsApi {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    public ResponseEntity<PublicTransactionDto> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId) {
-        return new ResponseEntity<PublicTransactionDto>(convertToDto(transactionService.getTransactionById(transactionId)),HttpStatus.OK);
+    public ResponseEntity<Transaction> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId) {
+        Transaction transaction = transactionService.getTransactionById(transactionId);
+        if (! CurrentUserInfo.isEmployee()) {
+            if (! transaction.getAccountFrom().getUser().getId().equals(CurrentUserInfo.getCurrentUserId())) {
+                throw new InvalidRequestException("You are not allowed to access this transaction.");
+            }
+        }
+
+        return new ResponseEntity<Transaction>(transaction,HttpStatus.OK);
     }
 
     public ResponseEntity<List<PublicTransactionDto>> getTransactions(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
