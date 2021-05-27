@@ -52,25 +52,28 @@ public class BankApiApplicationRunner implements ApplicationRunner
 //        UserRoles bothRoles = new UserRoles(Role.EMPLOYEE);
 //        bothRoles.addRole(Role.CUSTOMER);
 
-        Collection<Role> roles = new ArrayList<>();
+        Collection<Role> bothRoles = new ArrayList<>();
 
-        roles.add(Role.CUSTOMER);
-        roles.add(Role.EMPLOYEE);
+        bothRoles.add(Role.CUSTOMER);
+        bothRoles.add(Role.EMPLOYEE);
+
+        Collection<Role> roleCustomer = Arrays.asList(Role.CUSTOMER);
+        Collection<Role> roleEmployee = Arrays.asList(Role.EMPLOYEE);
 
 
         List<User> users = Arrays.asList
         (
-            new User("Brad","Gibson","0119627516","brad.gibson@example.com",encoder.encode("firewall"),roles),
-            new User("Bobbie","Grant","0112627416","bobbie.grant@example.com",encoder.encode("bobbiegrant123"),roles),
-            new User("Alex","Smith","0549687523","alex.smith@example.com",encoder.encode("alexsmith132"),roles),
-            new User("Ray","Manzarek","0295482332","ray.manzarek@example.com",encoder.encode("ray475"),roles),
-            new User("Benjamin","Franklin","0234765412","benjamin.franklin@example.com",encoder.encode("benjfrank091"),roles),
-            new User("George","Washington","0259847659","george.washington@example.com",encoder.encode("georgie829"),roles),
-            new User("Felix","Brown","0928957462","felix.brown@example.com",encoder.encode("felixbrown  430"),roles),
-            new User("Hans","Zimmer","0939857193","hans.zimmer@example.com",encoder.encode("hans4849"),roles),
-            new User("Neil","Gardner","0294891839","neil.garnder@example.com",encoder.encode("Neil1093"),roles),
-            new User("Virgil","Manson","0981049285","virgil.manson@example.com",encoder.encode("virgil98"),roles),
-            new User("Scrooge","McDuck","0123456789","scrooge@mcduck.com",encoder.encode("swimmingingold"), roles)
+            new User("Brad","Gibson","0119627516","brad.gibson@example.com",encoder.encode("firewall"),roleCustomer),
+            new User("Bobbie","Grant","0112627416","bobbie.grant@example.com",encoder.encode("bobbiegrant123"),roleEmployee),
+            new User("Alex","Smith","0549687523","alex.smith@example.com",encoder.encode("alexsmith132"),roleCustomer),
+            new User("Ray","Manzarek","0295482332","ray.manzarek@example.com",encoder.encode("ray475"),roleCustomer),
+            new User("Benjamin","Franklin","0234765412","benjamin.franklin@example.com",encoder.encode("benjfrank091"),bothRoles),
+            new User("George","Washington","0259847659","george.washington@example.com",encoder.encode("georgie829"),roleCustomer),
+            new User("Felix","Brown","0928957462","felix.brown@example.com",encoder.encode("felixbrown  430"),roleCustomer),
+            new User("Hans","Zimmer","0939857193","hans.zimmer@example.com",encoder.encode("hans4849"),roleCustomer),
+            new User("Neil","Gardner","0294891839","neil.garnder@example.com",encoder.encode("Neil1093"),roleEmployee),
+            new User("Virgil","Manson","0981049285","virgil.manson@example.com",encoder.encode("virgil98"),roleEmployee),
+            new User("Scrooge","McDuck","0123456789","scrooge@mcduck.com",encoder.encode("swimmingingold"), bothRoles)
         );
         users.forEach(user -> userService.addUser(user));
 
@@ -81,7 +84,7 @@ public class BankApiApplicationRunner implements ApplicationRunner
         Account bankAccount = new Account(bankIban,users.get(10),BigDecimal.valueOf(9999999), AccountType.CURRENT);
 
         // Add fixed accounts for debugging
-        Account fixedAccount1 = new Account("TESTIBAN01", users.get(0), BigDecimal.valueOf(5000), AccountType.SAVINGS);
+        Account fixedAccount1 = new Account("TESTIBAN01", users.get(0), BigDecimal.valueOf(5000), AccountType.CURRENT);
         Account fixedAccount2 = new Account("TESTIBAN02", users.get(1), BigDecimal.valueOf(500.50), AccountType.CURRENT);
         accountList.add(fixedAccount1);
         accountList.add(fixedAccount2);
