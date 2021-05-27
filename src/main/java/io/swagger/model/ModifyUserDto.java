@@ -37,7 +37,7 @@ public class ModifyUserDto   {
   @ElementCollection(targetClass = Role.class)
   private Collection<Role> roles;
 
-  public ModifyUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String emailAddress, @NonNull String password, @NonNull Collection<Role> roles) {
+  public ModifyUserDto( String firstName,  String lastName,  String phoneNumber, String emailAddress,  String password,  Collection<Role> roles) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
