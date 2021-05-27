@@ -1,9 +1,11 @@
 package io.swagger.api.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import io.swagger.api.ApiException;
 import io.swagger.model.Error;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,9 +14,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class ExceptionHandlers {
+
+    @ExceptionHandler(InvalidRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleInvalidRequestException(final InvalidRequestException ex) {
+        return new Error("INVALID_REQUEST", ex.getMessage());
+    }
+
+
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
@@ -22,11 +34,12 @@ public class ExceptionHandlers {
         return new Error("USER_NOT_FOUND", "The user was not found");
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(ApiException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error handleApiException(final ApiException ex){
-        return new Error("BAD_REQUEST", ex.getMessage());
+        System.out.println(ex.toString());
+        return new Error("BAD_REQUEST", String.format("%s",ex.getMessage()));
     }
 
     @ExceptionHandler(EmptyBodyException.class)
@@ -110,14 +123,30 @@ public class ExceptionHandlers {
 
     }
 
-//    HANDLE NOT FOUND ERRORS
+//    HANDLE MISSING JSON PROPERTY
+    @ExceptionHandler(HttpMessageConversionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleHttpMessageConversionException(final HttpMessageConversionException ex) {
+        return new Error("INVALID_REQUEST",ex.getMessage());
+    }
+
+
+    //    HANDLE INVALID URL PARAMETER
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException ex) {
+        return new Error("INVALID_REQUEST", ex.getMessage());
+    }
+
+    //    HANDLE NOT FOUND ERRORS
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error handleEmptyResultDataAccessException(final EmptyResultDataAccessException ex) {
         return new Error("NOT_FOUND_ERROR", ex.getMessage());
     }
-
 
 //    HANDLE JSON PARSE ERRORS
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -126,7 +155,6 @@ public class ExceptionHandlers {
     public Error handleHttpMessageNotReadableException(final HttpMessageNotReadableException ex) {
         return new Error("INVALID_JSON", ex.getMessage());
     }
-
 
 //    HANDLE ACCESS DENIED (employee only endpoint reached as user)
     @ExceptionHandler(AccessDeniedException.class)

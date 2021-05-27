@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
 @Data
+@NoArgsConstructor
 public class ModifyUserDto   {
   @Id
   private Long id;
@@ -37,7 +39,7 @@ public class ModifyUserDto   {
   @ElementCollection(targetClass = Role.class)
   private Collection<Role> roles;
 
-  public ModifyUserDto(@NonNull String firstName, @NonNull String lastName, @NonNull String phoneNumber,@NonNull String emailAddress, @NonNull String password, @NonNull Collection<Role> roles) {
+  public ModifyUserDto( String firstName,  String lastName,  String phoneNumber, String emailAddress,  String password,  Collection<Role> roles) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
