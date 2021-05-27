@@ -5,6 +5,9 @@ import io.swagger.model.Account;
 import io.swagger.model.ModifyAccountDto;
 import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
+import io.swagger.repository.UserRepository;
+import io.swagger.security.jwt.JwtUtils;
+import io.swagger.util.CurrentUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,12 @@ import java.util.Random;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     /**
      * Add an account to the database.
@@ -78,4 +87,28 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+    @Override
+    public boolean checkUserRole(String token, String iban) {
+        token = token.replace("Bearer ", ""); // Trim "Bearer" from token
+        String tokenEmail = jwtUtils.getEmailFromJwtToken(token);
+
+        try {
+            Account account = this.getAccountByIban(iban);
+            if (CurrentUserInfo.isEmployee()) {
+                return true;
+            }
+
+            String userEmail = account.getUser().getEmailAddress();
+
+            // See if account belongs to the requesting user
+            Integer accountMatch = tokenEmail.compareTo(userEmail);
+            if (accountMatch == 0) {
+                return true;
+            }
+        } catch (AccountNotFoundException exception) {
+            return false; // Account does not exist
+        }
+
+         return false;
+    }
 }

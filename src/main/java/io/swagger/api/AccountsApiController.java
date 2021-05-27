@@ -2,9 +2,7 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.api.exception.AccountNotFoundException;
-import io.swagger.model.Account;
-import io.swagger.model.CreateAccountDto;
-import io.swagger.model.ModifyAccountDto;
+import io.swagger.model.*;
 import io.swagger.service.AccountService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -69,9 +67,18 @@ public class AccountsApiController implements AccountsApi {
     }
 
     public ResponseEntity<Account> getAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required=true, schema=@Schema()) @PathVariable("iban") String iban) {
+        String token = request.getHeader("Authorization");
+
         try {
-            Account account = accountService.getAccountByIban(iban);
-            return new ResponseEntity<Account>(account, HttpStatus.OK);
+            boolean auth = accountService.checkUserRole(token, iban);
+            if(auth)
+            {
+                Account account = accountService.getAccountByIban(iban);
+                return new ResponseEntity<Account>(account, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
         } catch (AccountNotFoundException e) {
             return new ResponseEntity<Account>(HttpStatus.BAD_REQUEST);
         }
@@ -102,4 +109,20 @@ public class AccountsApiController implements AccountsApi {
         return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     }
 
+    private Account convertToEntity(CreateAccountDto createAccountDto) {
+
+        Account account = modelMapper.map(createAccountDto, Account.class);
+
+        return account;
+    }
+    private Account convertToUpdateUserEntity(ModifyAccountDto modifyAccountDto)
+    {
+        Account account = modelMapper.map(modifyAccountDto, Account.class);
+        return account;
+    }
+
+    private PublicAccountDto convertToPublicDto(Account account) {
+        PublicAccountDto publicAccount = modelMapper.map(account, PublicAccountDto.class);
+        return publicAccount;
+    }
 }

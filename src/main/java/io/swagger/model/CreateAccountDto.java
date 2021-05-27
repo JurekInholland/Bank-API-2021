@@ -24,7 +24,7 @@ public class CreateAccountDto {
   private String iban = null;
 
   @JsonProperty("userId")
-  private Integer userId = null;
+  private Long userId = null;
 
   @JsonProperty("balance")
   private BigDecimal balance = null;
@@ -51,7 +51,7 @@ public class CreateAccountDto {
     this.iban = iban;
   }
 
-  public CreateAccountDto userId(Integer userId) {
+  public CreateAccountDto userId(Long userId) {
     this.userId = userId;
     return this;
   }
@@ -63,11 +63,11 @@ public class CreateAccountDto {
   @Schema(required = true, description = "")
       @NotNull
 
-    public Integer getUserId() {
+    public Long getUserId() {
     return userId;
   }
 
-  public void setUserId(Integer userId) {
+  public void setUserId(Long userId) {
     this.userId = userId;
   }
 

@@ -28,7 +28,7 @@ public class ModifyAccountDto   {
   private AccountType accountType = null;
 
   @JsonProperty("userId")
-  private Integer userId = null;
+  private Long userId = null;
 
   public ModifyAccountDto iban(String iban) {
     this.iban = iban;
@@ -89,7 +89,7 @@ public class ModifyAccountDto   {
     this.accountType = accountType;
   }
 
-  public ModifyAccountDto userId(Integer userId) {
+  public ModifyAccountDto userId(Long userId) {
     this.userId = userId;
     return this;
   }
@@ -100,11 +100,11 @@ public class ModifyAccountDto   {
    **/
   @Schema(description = "")
   
-    public Integer getUserId() {
+    public Long getUserId() {
     return userId;
   }
 
-  public void setUserId(Integer userId) {
+  public void setUserId(Long userId) {
     this.userId = userId;
   }
 
