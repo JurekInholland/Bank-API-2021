@@ -23,9 +23,6 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private JwtUtils jwtUtils;
 
     /**
@@ -55,6 +52,7 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAccounts() {
         return (List<Account>) accountRepository.findAll();
     }
+
 
     @Override
     public Account getAccountByIban(String iban) {

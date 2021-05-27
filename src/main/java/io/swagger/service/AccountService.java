@@ -1,10 +1,9 @@
 package io.swagger.service;
 
 import io.swagger.model.Account;
-import io.swagger.model.ModifyAccountDto;
-import io.swagger.model.User;
 
 import java.util.List;
+
 
 public interface AccountService
 {

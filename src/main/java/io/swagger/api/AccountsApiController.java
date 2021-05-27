@@ -82,6 +82,7 @@ public class AccountsApiController implements AccountsApi {
     @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set", schema = @Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return", schema = @Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) {
         List<Account> accounts = accountService.getAccounts();
+
         return new ResponseEntity<List<Account>>(accounts.subList(Math.min(accounts.size(), offset), Math.min(accounts.size(), offset + limit)), HttpStatus.OK);
     }
 
