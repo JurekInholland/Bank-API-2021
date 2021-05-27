@@ -1,7 +1,5 @@
 package io.swagger.service;
 
-import io.swagger.model.Iban;
-
 public interface IbanService
 {
     Integer randNumber();

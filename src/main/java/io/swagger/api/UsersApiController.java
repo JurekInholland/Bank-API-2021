@@ -1,6 +1,7 @@
 package io.swagger.api;
 
 import io.swagger.api.exception.InvalidRequestException;
+import io.swagger.api.exception.UnauthorizedRequestException;
 import io.swagger.model.CreateUserDto;
 import io.swagger.model.ModifyUserDto;
 import io.swagger.model.PublicUserDto;
@@ -69,8 +70,13 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<User> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid) {
-
         User user = userService.getUserById(userid);
+
+        if (! CurrentUserInfo.isEmployee()) {
+            if (! CurrentUserInfo.getCurrentUserId().equals(user.getId()))
+            throw new UnauthorizedRequestException("You are not authorized to access this user.");
+        }
+
         return new ResponseEntity<>(user, HttpStatus.OK);    }
 
     public ResponseEntity<List<PublicUserDto>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue="0") Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) {
@@ -90,7 +96,7 @@ public class UsersApiController implements UsersApi {
 
         if(! CurrentUserInfo.isEmployee()) {
             if(Long.parseLong(userid.toString()) != CurrentUserInfo.getCurrentUserId()) {
-                throw new InvalidRequestException("You are not allowed to edit this user.");
+                throw new UnauthorizedRequestException("You are not allowed to edit this user.");
             }
         }
         userService.updateUser(body,userid);

@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.api.exception.InvalidRequestException;
+import io.swagger.api.exception.UnauthorizedRequestException;
 import io.swagger.model.Account;
 import io.swagger.model.CreateAccountDto;
 import io.swagger.model.ModifyAccountDto;
@@ -78,7 +79,7 @@ public class AccountsApiController implements AccountsApi {
 
         if (! CurrentUserInfo.isEmployee()) {
             if (! account.getUser().getId().equals(CurrentUserInfo.getCurrentUserId())) {
-                throw new InvalidRequestException("You are not allowed to acccess this account.");
+                throw new UnauthorizedRequestException("You are not allowed to acccess this account.");
             }
         }
 

@@ -1,21 +1,13 @@
 package io.swagger.service;
 
-import io.swagger.api.exception.AccountNotFoundException;
+import io.swagger.api.exception.RequestNotFoundException;
 import io.swagger.model.Account;
-import io.swagger.model.ModifyAccountDto;
-import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import io.swagger.repository.TransactionRepository;
-import io.swagger.repository.UserRepository;
-import io.swagger.security.jwt.JwtUtils;
-import io.swagger.util.CurrentUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 @Service
 
@@ -57,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountByIban(String iban) {
-        return accountRepository.findById(iban).orElseThrow(() -> new  AccountNotFoundException(iban));
+        return accountRepository.findById(iban).orElseThrow(() -> new RequestNotFoundException(String.format("Account with IBAN %s was not found",iban)));
     }
 
     @Override
@@ -76,8 +68,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccountByIban(Account newAccount, String iban) {
 
-        Optional<Account> updateAccount = accountRepository.findById(iban);
-        Account account = updateAccount.get();
+        Account account = accountRepository.findById(iban).orElseThrow(() -> new RequestNotFoundException(String.format("Account with IBAN %s was not found",iban)));
         account.setBalance(newAccount.getBalance());
         account.setAccountType(newAccount.getAccountType());
         account.setUser(newAccount.getUser());

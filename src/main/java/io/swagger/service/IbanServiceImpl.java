@@ -1,9 +1,8 @@
 package io.swagger.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import io.swagger.api.exception.AccountNotFoundException;
+
 import io.swagger.model.Account;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;

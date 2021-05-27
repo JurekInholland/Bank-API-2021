@@ -1,7 +1,7 @@
 package io.swagger.api.exception;
 
-public class InvalidRequestException extends RuntimeException {
-    public InvalidRequestException (String message) {
+public class UnauthorizedRequestException extends RuntimeException {
+    public UnauthorizedRequestException(String message) {
         super(message);
     }
 }

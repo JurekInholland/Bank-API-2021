@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 
 public class ModifyAccountDto   {
 
-
   @Schema(description = "")@Valid
   @JsonProperty("accountType")
   private AccountType accountType = null;

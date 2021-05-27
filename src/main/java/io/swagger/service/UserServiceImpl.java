@@ -1,7 +1,6 @@
 package io.swagger.service;
 
-import io.swagger.api.exception.UserNotFoundException;
-import io.swagger.model.CreateUserDto;
+import io.swagger.api.exception.RequestNotFoundException;
 import io.swagger.model.ModifyUserDto;
 import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService
     }
     public User getUserById(long id)
     {
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(()-> new RequestNotFoundException(String.format("User with id %s was not found.", id)));
     }
     public List<User> getUsers()
     {
@@ -41,7 +40,7 @@ public class UserServiceImpl implements UserService
     }
     public void updateUser(ModifyUserDto modifyUserDto, long id)
     {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(() -> new RequestNotFoundException(String.format("User with id %s was not found.", id)));
 
         if (modifyUserDto.getFirstName() != null && !modifyUserDto.getFirstName().isEmpty()) {
             user.setFirstName(modifyUserDto.getFirstName());
