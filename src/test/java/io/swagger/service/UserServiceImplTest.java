@@ -103,7 +103,7 @@ public class UserServiceImplTest {
     @Test
     public void updateUser(){
 
-        userService.updateUser(modifiedUser, 1L);
+        userService.updateUser(modifiedUser, modifiedUser.getId());
         assertNotNull(modifiedUser);
     }
 }

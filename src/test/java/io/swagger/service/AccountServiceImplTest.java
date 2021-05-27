@@ -95,8 +95,8 @@ public class AccountServiceImplTest {
     @Test
     public void updateAccountByIban(){
 
-        accountService.updateAccountByIban(modifyAccount, "NL05");
-        assertNotNull(modifyAccount);
+        accountService.updateAccountByIban(testAccount, testAccount.getIban());
+        assertNotNull(testAccount);
     }
 
 }
