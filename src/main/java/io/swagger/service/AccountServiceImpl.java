@@ -10,12 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 @Service
-// TODO: This is breaking the application
-/*
 
- */
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
@@ -59,13 +58,24 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateAccountByIban(ModifyAccountDto modifyAccountDto, String iban) {
-        accountRepository.updateAccountByIban(
-                modifyAccountDto.getIban(),
-                modifyAccountDto.getBalance(),
-                modifyAccountDto.getAccountType(),
-                modifyAccountDto.getUserId()
-        );
+    public boolean updateAccountByIban(Account newAccount, String iban) {
+
+        Optional<Account> updateAccount = accountRepository.findById(iban);
+
+        if (updateAccount.isPresent()) {
+
+            Account account = updateAccount.get();
+            account.setBalance(newAccount.getBalance());
+            account.setAccountType(newAccount.getAccountType());
+            account.setUser(newAccount.getUser());
+            accountRepository.save(account);
+
+            return true;
+        } else {
+            return false;
+        }
+
+
     }
 
 }
