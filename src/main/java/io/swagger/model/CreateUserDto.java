@@ -27,12 +27,18 @@ public class CreateUserDto   {
 
   @Id
   private BigDecimal id;
+  @NotEmpty
   private String firstName;
+  @NotEmpty
   private String lastName;
+  @NotEmpty
   private String phoneNumber;
+  @NotEmpty
   private String emailAddress;
+  @NotEmpty
   private String password;
 
+  @NotEmpty
   @Enumerated(EnumType.STRING)
   @ElementCollection(targetClass = Role.class)
   private Collection<Role> roles;
