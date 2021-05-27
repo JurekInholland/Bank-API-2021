@@ -1,9 +1,14 @@
 package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.api.exception.AccountNotFoundException;
-import io.swagger.model.*;
+import io.swagger.api.exception.InvalidRequestException;
+import io.swagger.model.Account;
+import io.swagger.model.CreateAccountDto;
+import io.swagger.model.ModifyAccountDto;
+import io.swagger.model.User;
 import io.swagger.service.AccountService;
+import io.swagger.service.IbanService;
+import io.swagger.service.UserService;
 import io.swagger.util.CurrentUserInfo;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -22,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 @RestController
@@ -32,6 +37,12 @@ public class AccountsApiController implements AccountsApi {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private IbanService ibanService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -48,7 +59,6 @@ public class AccountsApiController implements AccountsApi {
         this.request = request;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Void> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody CreateAccountDto body) {
         Account account = this.convertToEntity(body);
         accountService.addAccount(account);
@@ -56,28 +66,23 @@ public class AccountsApiController implements AccountsApi {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Void> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "The iban account to delete", required = true, schema = @Schema()) @PathVariable("iban") String iban) {
-        String token = request.getHeader("Authorization");
-
-        boolean auth = accountService.checkAuth(token, iban);
-        if (auth) {
-            accountService.deleteAccountByIban(iban);
-            return new ResponseEntity<Void>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        accountService.deleteAccountByIban(iban);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     public ResponseEntity<Account> getAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required = true, schema = @Schema()) @PathVariable("iban") String iban) {
-        String token = request.getHeader("Authorization");
 
-        boolean auth = accountService.checkAuth(token, iban);
-        if (auth) {
-            Account account = accountService.getAccountByIban(iban);
-            return new ResponseEntity<Account>(account, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        Account account = accountService.getAccountByIban(iban);
+
+        if (! CurrentUserInfo.isEmployee()) {
+            if (! account.getUser().getId().equals(CurrentUserInfo.getCurrentUserId())) {
+                throw new InvalidRequestException("You are not allowed to acccess this account.");
+            }
         }
+
+        return new ResponseEntity<Account>(account, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set", schema = @Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return", schema = @Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) {
@@ -90,34 +95,28 @@ public class AccountsApiController implements AccountsApi {
                 if (!CurrentUserInfo.isEmployee()) {
                     if (account.getUser().getId().equals(CurrentUserInfo.getCurrentUserId())) {
                         outputAccounts.add(account);
-                    } else {
-                        outputAccounts.add(account);
                     }
+                } else {
+                    outputAccounts.add(account);
                 }
             });
         return new ResponseEntity<List<Account>>(outputAccounts.subList(Math.min(outputAccounts.size(), offset), Math.min(outputAccounts.size(), offset + limit)), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> updateAccount(@Parameter(in = ParameterIn.PATH, description = "The the iban of the account", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody ModifyAccountDto body) {
-        String token = request.getHeader("Authorization");
-
-        boolean auth = accountService.checkAuth(token, iban);
-        if (auth) {
-            Account account = this.convertToUpdateAccountEntity(body);
-            boolean update = accountService.updateAccountByIban(account, iban);
-            if (update) {
-                return new ResponseEntity<Void>(HttpStatus.OK);
-            } else {
-                return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
+        Account account = this.convertToUpdateAccountEntity(body);
+        accountService.updateAccountByIban(account, iban);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     private Account convertToEntity(CreateAccountDto createAccountDto) {
         Account account = modelMapper.map(createAccountDto, Account.class);
+        User user = userService.getUserById(CurrentUserInfo.getCurrentUserId());
+        account.setUser(user);
+
+        account.setBalance(BigDecimal.ZERO);
+        account.setIban(ibanService.generateUniqueIban());
+
         return account;
     }
 
@@ -125,10 +124,4 @@ public class AccountsApiController implements AccountsApi {
         Account account = modelMapper.map(modifyAccountDto, Account.class);
         return account;
     }
-
-    private PublicAccountDto convertToPublicAccountDto(Account account) {
-        PublicAccountDto publicAccount = modelMapper.map(account, PublicAccountDto.class);
-        return publicAccount;
-    }
-
 }

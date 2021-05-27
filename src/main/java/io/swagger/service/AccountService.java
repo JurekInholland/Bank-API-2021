@@ -12,8 +12,7 @@ public interface AccountService
     List<Account> getAccounts();
     Account getAccountByIban(String iban);
     void deleteAccountByIban(String iban);
-    boolean updateAccountByIban(Account newAccount, String iban);
-    boolean checkAuth(String token, String iban);
+    void updateAccountByIban(Account newAccount, String iban);
 
 
 }
