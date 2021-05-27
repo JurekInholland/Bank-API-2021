@@ -1,9 +1,11 @@
 package io.swagger.api.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import io.swagger.api.ApiException;
 import io.swagger.model.Error;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,10 +34,11 @@ public class ExceptionHandlers {
         return new Error("USER_NOT_FOUND", "The user was not found");
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(ApiException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Error handleApiException(final ApiException ex){
+        System.out.println(ex.toString());
         return new Error("BAD_REQUEST", String.format("%s",ex.getMessage()));
     }
 
@@ -119,6 +122,15 @@ public class ExceptionHandlers {
         return new Error("VALIDATION_ERROR", validationError);
 
     }
+
+//    HANDLE MISSING JSON PROPERTY
+    @ExceptionHandler(HttpMessageConversionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Error handleHttpMessageConversionException(final HttpMessageConversionException ex) {
+        return new Error("INVALID REQUEST",ex.getMessage());
+    }
+
 
     //    HANDLE INVALID URL PARAMETER
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
