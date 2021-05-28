@@ -69,8 +69,16 @@ public class UsersApiController implements UsersApi {
 
     public ResponseEntity<User> getUser(@Parameter(in = ParameterIn.PATH, description = "The userid of the user", required=true, schema=@Schema()) @PathVariable("userid") Integer userid) {
 
+        if(!CurrentUserInfo.isEmployee())
+        {
+            if (Long.parseLong(userid.toString()) != CurrentUserInfo.getCurrentUserId())
+            {
+                throw new RuntimeException("You are not allowed to get this user");
+            }
+        }
         User user = userService.getUserById(userid);
-        return new ResponseEntity<>(user, HttpStatus.OK);    }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     public ResponseEntity<List<PublicUserDto>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false, defaultValue="0") Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false, defaultValue = "100") Integer limit) {
 
@@ -84,7 +92,6 @@ public class UsersApiController implements UsersApi {
 
         return new ResponseEntity<>(publicUsers.subList(Math.min(users.size(), offset),Math.min(users.size(), offset + limit)),HttpStatus.OK);
     }
-
 
     public ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "The userid for the user to update", required=true, schema=@Schema()) @PathVariable("userid") Integer userid,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody ModifyUserDto body) {
 
@@ -105,13 +112,8 @@ public class UsersApiController implements UsersApi {
 
         return user;
     }
-    private User convertToUpdateUserEntity(ModifyUserDto modifyUserDto)
-    {
-        User user = modelMapper.map(modifyUserDto, User.class);
-        return user;
-    }
-
 //    Convert User to PublicUserDto
+//
     private PublicUserDto convertToPublicDto(User user) {
         PublicUserDto publicUser = modelMapper.map(user, PublicUserDto.class);
         return publicUser;
