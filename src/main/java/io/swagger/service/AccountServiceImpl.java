@@ -1,23 +1,22 @@
 package io.swagger.service;
 
-import io.swagger.api.exception.AccountNotFoundException;
+import io.swagger.api.exception.RequestNotFoundException;
 import io.swagger.model.Account;
-import io.swagger.model.ModifyAccountDto;
-import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
+import io.swagger.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 @Service
 
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     /**
      * Add an account to the database.
@@ -47,35 +46,33 @@ public class AccountServiceImpl implements AccountService {
         return (List<Account>) accountRepository.findAll();
     }
 
+
     @Override
     public Account getAccountByIban(String iban) {
-        return accountRepository.findById(iban).orElseThrow(() -> new AccountNotFoundException(iban));
+        return accountRepository.findById(iban).orElseThrow(() -> new RequestNotFoundException(String.format("Account with IBAN %s was not found",iban)));
     }
 
     @Override
     public void deleteAccountByIban(String iban) {
+
+//        Delete transactions belonging to account
+        transactionRepository.findAll().forEach(transaction -> {
+            if (transaction.getAccountTo().getIban().equals(iban) || transaction.getAccountFrom().getIban().equals(iban)) {
+                transactionRepository.deleteById(transaction.getId());
+            }
+        });
+
         accountRepository.deleteById(iban);
     }
 
     @Override
-    public boolean updateAccountByIban(Account newAccount, String iban) {
+    public void updateAccountByIban(Account newAccount, String iban) {
 
-        Optional<Account> updateAccount = accountRepository.findById(iban);
-
-        if (updateAccount.isPresent()) {
-
-            Account account = updateAccount.get();
-            account.setBalance(newAccount.getBalance());
-            account.setAccountType(newAccount.getAccountType());
-            account.setUser(newAccount.getUser());
-            accountRepository.save(account);
-
-            return true;
-        } else {
-            return false;
-        }
-
-
+        Account account = accountRepository.findById(iban).orElseThrow(() -> new RequestNotFoundException(String.format("Account with IBAN %s was not found",iban)));
+        account.setBalance(newAccount.getBalance());
+        account.setAccountType(newAccount.getAccountType());
+        account.setUser(newAccount.getUser());
+        accountRepository.save(account);
     }
 
 }

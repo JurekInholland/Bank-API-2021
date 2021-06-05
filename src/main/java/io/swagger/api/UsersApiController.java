@@ -1,5 +1,7 @@
 package io.swagger.api;
 
+import io.swagger.api.exception.InvalidRequestException;
+import io.swagger.api.exception.UnauthorizedRequestException;
 import io.swagger.model.CreateUserDto;
 import io.swagger.model.ModifyUserDto;
 import io.swagger.model.PublicUserDto;
@@ -73,7 +75,7 @@ public class UsersApiController implements UsersApi {
         {
             if (Long.parseLong(userid.toString()) != CurrentUserInfo.getCurrentUserId())
             {
-                throw new RuntimeException("You are not allowed to get this user");
+                throw new UnauthorizedRequestException("You are not allowed to get this user");
             }
         }
         User user = userService.getUserById(userid);
@@ -97,7 +99,7 @@ public class UsersApiController implements UsersApi {
 
         if(! CurrentUserInfo.isEmployee()) {
             if(Long.parseLong(userid.toString()) != CurrentUserInfo.getCurrentUserId()) {
-                throw new RuntimeException("You are not allowed to edit this user.");
+                throw new UnauthorizedRequestException("You are not allowed to edit this user.");
             }
         }
         userService.updateUser(body,userid);

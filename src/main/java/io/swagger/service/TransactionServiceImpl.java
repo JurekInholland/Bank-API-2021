@@ -1,6 +1,6 @@
 package io.swagger.service;
 
-import io.swagger.api.exception.TransactionNotFoundException;
+import io.swagger.api.exception.RequestNotFoundException;
 import io.swagger.model.Account;
 import io.swagger.model.Transaction;
 import io.swagger.model.User;
@@ -28,16 +28,16 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction getTransactionById(int id) {
-        return transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFoundException(id));
+    public Transaction getTransactionById(long id) {
+        return transactionRepository.findById(id).orElseThrow(() -> new RequestNotFoundException(String.format("Account with id %s was not found.",id)));
     }
 
     @Override
-    public void deleteTransactionById(int id) {
+    public void deleteTransactionById(long id) {
         if (transactionRepository.findById(id) != null) {
             transactionRepository.deleteById(id);
         }
-        else throw new TransactionNotFoundException(id);
+        else throw new RequestNotFoundException(String.format("Account with id %s was not found.",id));
 
     }
 
