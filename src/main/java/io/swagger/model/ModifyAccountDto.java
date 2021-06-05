@@ -17,21 +17,9 @@ import java.math.BigDecimal;
 
 
 public class ModifyAccountDto   {
-  @Schema(description = "")
-  @JsonProperty("iban")
-  private String iban = null;
-
-  @Schema(description = "")@Valid
-  @JsonProperty("balance")
-  private BigDecimal balance = null;
 
   @Schema(description = "")@Valid
   @JsonProperty("accountType")
   private AccountType accountType = null;
-
-  @Schema(description = "")
-  @JsonProperty("userId")
-  private Long userId = null;
-
 
 }

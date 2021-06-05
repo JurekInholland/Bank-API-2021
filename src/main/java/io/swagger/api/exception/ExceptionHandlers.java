@@ -1,12 +1,11 @@
 package io.swagger.api.exception;
 
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
-import io.swagger.api.ApiException;
 import io.swagger.model.Error;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,48 +25,25 @@ public class ExceptionHandlers {
         return new Error("INVALID_REQUEST", ex.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedRequestException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public Error handleUnauthorizedRequestException(final UnauthorizedRequestException ex) {
+        return new Error("UNAUTHORIZED", ex.getMessage());
+    }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(RequestNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public Error handleUserNotFoundException(final UserNotFoundException ex) {
-        return new Error("USER_NOT_FOUND", "The user was not found");
+    public Error handleRequestNotFoundException(final RequestNotFoundException ex) {
+        return new Error("NOT_FOUND", ex.getMessage());
     }
 
-    @ExceptionHandler(ApiException.class)
+    @ExceptionHandler(TransactionLimitException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public Error handleApiException(final ApiException ex){
-        System.out.println(ex.toString());
-        return new Error("BAD_REQUEST", String.format("%s",ex.getMessage()));
-    }
-
-    @ExceptionHandler(EmptyBodyException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleEmptyBodyException(final EmptyBodyException ex) {
-        return new Error("INVALID_BODY", "No values provided.");
-    }
-
-    @ExceptionHandler(InvalidAccountException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleInvalidAccountException(final InvalidAccountException ex) {
-        return new Error("INVALID_ACCOUNT", "origin and target accounts cannot be the same.");
-    }
-
-    @ExceptionHandler(TransactionLimitError.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleTransactionLimitError(final TransactionLimitError ex) {
+    public Error handleTransactionLimitError(final TransactionLimitException ex) {
         return new Error("TRANSACTION_LIMIT_EXCEEDED", ex.getMessage());
-    }
-
-    @ExceptionHandler(SavingsAccountMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleSavingsAccountMismatchException(final SavingsAccountMismatchException ex) {
-        return new Error("SAVINGS_ACCOUNT_MISMATCH", ex.getMessage());
     }
 
     @ExceptionHandler({AbsoluteLimitException.class})
@@ -75,34 +51,6 @@ public class ExceptionHandlers {
     @ResponseBody
     public Error handleAbsoluteLimitException(final AbsoluteLimitException ex) {
         return new Error("ABSOLUTE_LIMIT_EXCEEDED", ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidTransactionAmountException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleInvalidTransactionAmountException(final InvalidTransactionAmountException ex) {
-        return new Error("INVALID_AMOUNT", ex.getMessage());
-    }
-
-    @ExceptionHandler(AccountNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleAccountNotFoundException(final AccountNotFoundException ex) {
-        return new Error("ACCOUNT_NOT_FOUND", ex.getMessage());
-    }
-
-    @ExceptionHandler(TransactionNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Error handleTransactionNotFoundException(final TransactionNotFoundException ex) {
-        return new Error("TRANSACTION_NOT_FOUND", ex.getMessage());
-    }
-
-    @ExceptionHandler(NoAccessToAccountException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    public Error handleNoAccessToAccountException(final NoAccessToAccountException ex) {
-        return new Error("NO_PERMISSION", ex.getMessage());
     }
 
     @ExceptionHandler(DailyLimitReachedException.class)
@@ -118,9 +66,14 @@ public class ExceptionHandlers {
     @ResponseBody
     public Error handleMethodArgumentNotValidException(final MethodArgumentNotValidException ex) {
 
-        String validationError = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        return new Error("VALIDATION_ERROR", validationError);
+        FieldError fieldError = ex.getBindingResult().getFieldErrors().get(0);
+        String error = fieldError.getDefaultMessage();
 
+        if (fieldError.getObjectName() == "createAccountDto" && fieldError.getField() == "accountType") {
+            error = "Field accountType must be either 'savings' or 'current'.";
+        }
+
+        return new Error("VALIDATION_ERROR", error);
     }
 
 //    HANDLE MISSING JSON PROPERTY
@@ -130,7 +83,6 @@ public class ExceptionHandlers {
     public Error handleHttpMessageConversionException(final HttpMessageConversionException ex) {
         return new Error("INVALID_REQUEST",ex.getMessage());
     }
-
 
     //    HANDLE INVALID URL PARAMETER
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

@@ -2,6 +2,8 @@ package io.swagger.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AccountType;
@@ -18,21 +20,8 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-21T13:43:31.154Z[GMT]")
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateAccountDto {
-
-
-  @Schema(description = "")
-  @JsonProperty("iban")
-  private String iban = null;
-
-  @Schema(required = true, description = "")@NotNull
-  @JsonProperty("userId")
-  private Long userId = null;
-
-  @Schema(required = true, description = "")@NotNull
-  @JsonProperty("balance")
-  private BigDecimal balance = null;
 
   @Schema(required = true, description = "")@NotNull@Valid
   @JsonProperty("accountType")

@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 public class PublicTransactionDto   {
   @Schema(required = true, description = "")@NotNull
   @JsonProperty("id")
-  private Integer id = null;
+  private Long id = null;
 
   @Schema(required = true, description = "")@NotNull@Valid
   @JsonProperty("accountFrom")

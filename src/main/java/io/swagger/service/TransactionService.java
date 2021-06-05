@@ -11,8 +11,8 @@ public interface TransactionService
 {
     Transaction addTransaction(Transaction transaction);
     Transaction executeTransaction(Account fromAccount, Account toAccount, BigDecimal amount);
-    Transaction getTransactionById(int id);
-    void deleteTransactionById(int id);
+    Transaction getTransactionById(long id);
+    void deleteTransactionById(long id);
     List<Transaction> getTransactions();
 
     List<Transaction> getUserTransactions(User user);

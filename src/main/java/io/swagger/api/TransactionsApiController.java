@@ -62,6 +62,7 @@ public class TransactionsApiController implements TransactionsApi {
         this.request = request;
     }
 
+
     public ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody CreateTransactionDto body) {
         Transaction transaction = createTransactionFromDto(body);
         validateTransaction(transaction);
@@ -77,8 +78,15 @@ public class TransactionsApiController implements TransactionsApi {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    public ResponseEntity<PublicTransactionDto> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId) {
-        return new ResponseEntity<PublicTransactionDto>(convertToDto(transactionService.getTransactionById(transactionId)),HttpStatus.OK);
+    public ResponseEntity<Transaction> getTransactionById(@Parameter(in = ParameterIn.PATH, description = "The transactionId of the transaction", required=true, schema=@Schema()) @PathVariable("transactionId") Integer transactionId) {
+        Transaction transaction = transactionService.getTransactionById(transactionId);
+        if (! CurrentUserInfo.isEmployee()) {
+            if (! transaction.getAccountFrom().getUser().getId().equals(CurrentUserInfo.getCurrentUserId())) {
+                throw new UnauthorizedRequestException("You are not allowed to access this transaction.");
+            }
+        }
+
+        return new ResponseEntity<Transaction>(transaction,HttpStatus.OK);
     }
 
     public ResponseEntity<List<PublicTransactionDto>> getTransactions(@Parameter(in = ParameterIn.QUERY, description = "The number of items to skip before starting to collect the result set" ,schema=@Schema()) @Valid @RequestParam(value = "offset", required = false) Integer offset,@Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
@@ -109,7 +117,7 @@ public class TransactionsApiController implements TransactionsApi {
         Transaction transaction = transactionService.getTransactionById(transactionId);
 
         if (body.isEmpty()) {
-            throw new EmptyBodyException();
+            throw new InvalidRequestException("No values provided.");
         }
 
         if (body.getFromIban() != null) {
@@ -181,7 +189,7 @@ public class TransactionsApiController implements TransactionsApi {
 
     private void validateTransactionLimit(Transaction transaction) {
         if (transaction.getAmount().compareTo(transaction.getUserPerforming().getTransactionLimit()) > 0) {
-            throw new TransactionLimitError(transaction.getAmount(), transaction.getUserPerforming().getTransactionLimit());
+            throw new TransactionLimitException(transaction.getAmount(), transaction.getUserPerforming().getTransactionLimit());
         }
     }
 
@@ -190,10 +198,10 @@ public class TransactionsApiController implements TransactionsApi {
         //        Validate only owners can transfer to and from savings account
         if (transaction.getAccountFrom().getUser() != transaction.getAccountTo().getUser()) {
             if (transaction.getAccountFrom().getAccountType() == AccountType.SAVINGS) {
-                throw new SavingsAccountMismatchException("You cannot transfer from a savings account to another account you don't own.");
+                throw new InvalidRequestException("You cannot transfer from a savings account to another account you don't own.");
             }
             if (transaction.getAccountTo().getAccountType() == AccountType.SAVINGS) {
-                throw new SavingsAccountMismatchException("You cannot transfer to a savings account you don't own.");
+                throw new InvalidRequestException("You cannot transfer to a savings account you don't own.");
             }
         }
     }
@@ -205,14 +213,14 @@ public class TransactionsApiController implements TransactionsApi {
 
 //            Only the owner has access to the bank's account
             if (! CurrentUserInfo.isEmployee() || transaction.getAccountFrom().getIban().equals(bankIban) ) {
-                throw new NoAccessToAccountException(transaction.getAccountFrom().getIban());
+                throw new UnauthorizedRequestException(String.format("You don't have access to the account with iban %s.",transaction.getAccountFrom().getIban()));
             }
         }
     }
 
     private void validateSameAccount(Transaction transaction) {
         if (transaction.getAccountFrom().getIban() == transaction.getAccountTo().getIban()) {
-            throw new InvalidAccountException();
+            throw new InvalidRequestException("origin and target accounts cannot be the same.");
         }
     }
 

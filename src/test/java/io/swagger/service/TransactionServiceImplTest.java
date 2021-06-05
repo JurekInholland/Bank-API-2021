@@ -96,7 +96,7 @@ class TransactionServiceImplTest {
         transaction1.setTimestamp(OffsetDateTime.now());
         transactionRepository.save(transaction1);
 
-        when(transactionRepository.findById(1)).thenReturn(java.util.Optional.ofNullable(transaction1));
+        when(transactionRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(transaction1));
         Transaction transaction = transactionService.getTransactionById(1);
         assertEquals(transaction, transaction1);
 
@@ -106,9 +106,9 @@ class TransactionServiceImplTest {
     void deleteTransactionById() {
 
         transaction1.setTimestamp(OffsetDateTime.now());
-        transaction1.setId(0);
+        transaction1.setId(0L);
         transactionRepository.save(transaction1);
-        transactionService.deleteTransactionById(0);
+        transactionService.deleteTransactionById(0L);
         List<Transaction> transactionL = transactionService.getTransactions();
         System.out.println("tl"+transactionL);
     }
