@@ -1,6 +1,5 @@
 Feature: Accounts
 
-
   Scenario: Get accounts (Employee)
     Given the user logged in is an employee
     When the user visits accounts endpoint
