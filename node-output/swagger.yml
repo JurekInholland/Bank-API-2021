@@ -261,30 +261,6 @@
             "description" : "bad input parameter"
           }
         }
-      },
-      "post" : {
-        "tags" : [ "employees", "customers" ],
-        "summary" : "create an account",
-        "description" : "creating an account | User access; Customer & Employee",
-        "operationId" : "createAccount",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreateAccountDto"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "Account created successfully"
-          },
-          "400" : {
-            "description" : "Invalid request, account not created"
-          }
-        }
       }
     },
     "/accounts/{iban}" : {
