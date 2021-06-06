@@ -83,21 +83,6 @@ public class AccountServiceImplTest {
         assertEquals(account, testAccount);
     }
 
-    @Test
-    public void deleteAccountByIban(){
-        testUser.setId(0L);
-        accountRepository.save(testAccount);
-        accountService.deleteAccountByIban("NL05");
-        List<Account> accountL = accountService.getAccounts();
-        System.out.println("tl"+accountL);
-    }
-
-    @Test
-    public void updateAccountByIban(){
-
-        accountService.updateAccountByIban(testAccount, testAccount.getIban());
-        assertNotNull(testAccount);
-    }
 
 }
 

@@ -25,6 +25,7 @@ import org.threeten.bp.OffsetDateTime;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -122,22 +123,11 @@ class AccountsApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(String.format("{\"iban\": \"%s\", \"userId\": \"%s\", \"accountType\": \"%s\"}",testIban1, userId, accountType1)))
                 .andExpect(status().isOk());
-
-        MvcResult res = mvc.perform(post("/accounts")
-                .header("Authorization", "Bearer " + this.jwtToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"iban\": \"%s\", \"userId\": \"%s\", \"accountType\": \"%s\"}",testIban1, userId, accountType1)))
-                .andExpect(status().is4xxClientError()).andReturn();
-        System.out.println(res);
-        System.out.println("asd");
-
     }
 
     @Test
     void deleteAccount() throws Exception {
-        Account mockAccount = createMockAccount(testUser,testIban1, BigDecimal.valueOf(1000), AccountType.CURRENT);
-
-        mvc.perform(delete("/accounts/" + mockAccount.getUser().getId())
+        mvc.perform(delete("/accounts/" + testIban1)
                 .header("Authorization", "Bearer " + this.jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
@@ -147,9 +137,8 @@ class AccountsApiControllerTest {
 
     @Test
     void getAccount() throws Exception {
-        Account mockAccount = createMockAccount(testUser,testIban1, BigDecimal.valueOf(1000), AccountType.CURRENT);
 
-        mvc.perform((get("/accounts/" + mockAccount.getUser().getId())
+        mvc.perform((get("/accounts/" + testAccount.getIban())
                 .header("Authorization", "Bearer " + this.jwtToken))
         ).andExpect(status().isOk());
     }
@@ -161,14 +150,4 @@ class AccountsApiControllerTest {
         ).andExpect(status().isOk());
     }
 
-    @Test
-    void updateAccount() throws Exception {
-        Account mockAccount = createMockAccount(testUser,testIban1, BigDecimal.valueOf(1000), AccountType.CURRENT);
-
-        mvc.perform((put("/accounts/" + mockAccount.getUser().getId())
-                .header("Authorization", "Bearer " + this.jwtToken))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"iban\": \"%s\", \"userId\": \"%s\", \"accountType\": \"%s\"}",testIban1, userId, accountType1)))
-        .andExpect(status().isOk());
-    }
 }

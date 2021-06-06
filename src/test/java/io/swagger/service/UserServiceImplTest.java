@@ -48,6 +48,7 @@ public class UserServiceImplTest {
         User u = new User("testuser111", "testln", "12345", "testuser1@example.com", "secret", roles);
         modifiedUser = new ModifyUserDto("testuser111", "testln", "555555", "testuser1@example.com", "secret", roles);
 
+        userRepository.save(u);
         testUser = u;
 //        testUser.setFirstName("TestUserFirst");
 //        testUser.setLastName("TestUseLast");
@@ -72,17 +73,6 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void deleteUserById(){
-
-        testUser.setId(0L);
-        userRepository.save(testUser);
-        userService.deleteUserById(0l);
-        List<User> userL = userService.getUsers();
-        System.out.println("tl"+userL);
-
-    }
-
-    @Test
     public void getUserById(){
 
         userRepository.save(testUser);
@@ -100,10 +90,5 @@ public class UserServiceImplTest {
         assertEquals(userList1, userList);
     }
 
-    @Test
-    public void updateUser(){
 
-        userService.updateUser(modifiedUser, modifiedUser.getId());
-        assertNotNull(modifiedUser);
-    }
 }

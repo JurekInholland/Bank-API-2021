@@ -119,20 +119,13 @@ public class UsersApiControllerTest {
 
     @Test
     void createUser() throws Exception{
-
+        roles.add(Role.EMPLOYEE);
         mvc.perform(post("/users")
                 .header("Authorization", "Bearer " + this.jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\"}",firstName, lastName, phoneNumber, emailAddress,password,role)))
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": [\"EMPLOYEE\"]}",firstName, lastName, phoneNumber, emailAddress,password,roles)))
                 .andExpect(status().isOk());
 
-        MvcResult res = mvc.perform(post("/users")
-                .header("Authorization", "Bearer " + this.jwtToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\"}",firstName,lastName, phoneNumber, emailAddress,password,role)))
-                .andExpect(status().is4xxClientError()).andReturn();
-        System.out.println(res);
-        System.out.println("asd");
         
     }
 
@@ -164,12 +157,11 @@ public class UsersApiControllerTest {
 
     @Test
     void updateUser() throws Exception {
-        User mockUser = createTestUser();
 
-        mvc.perform((put("/users/" + mockUser.getId())
+        mvc.perform((put("/users/" + testUser.getId())
                 .header("Authorization", "Bearer " + this.jwtToken))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\", \"roles\": \"%s\"}",firstName,lastName, phoneNumber, emailAddress,password,role)))
+                .content(String.format("{\"id\": \"01\", \"firstName\": \"%s\", \"lastName\": \"100\", \"phoneNumber\": \"%s\", \"emailAddress\": \"%s\",\"password\": \"%s\"}",firstName,lastName, phoneNumber, emailAddress,password)))
         .andExpect(status().isOk());
     }
 }
