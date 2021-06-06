@@ -261,6 +261,30 @@
             "description" : "bad input parameter"
           }
         }
+      },
+      "post" : {
+        "tags" : [ "employees", "customers" ],
+        "summary" : "create an account",
+        "description" : "creating an account | User access; Customer & Employee",
+        "operationId" : "createAccount",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateAccountDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Account created successfully"
+          },
+          "400" : {
+            "description" : "Invalid request, account not created"
+          }
+        }
       }
     },
     "/accounts/{iban}" : {
@@ -293,40 +317,6 @@
           },
           "400" : {
             "description" : "account not found"
-          }
-        }
-      },
-      "put" : {
-        "tags" : [ "employees", "customers" ],
-        "summary" : "update an account",
-        "description" : "updating an accouint using an iban | User access; Customer (can only update their own account) & Employee",
-        "operationId" : "updateAccount",
-        "parameters" : [ {
-          "name" : "iban",
-          "in" : "path",
-          "description" : "The the iban of the account",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/ModifyAccountDto"
-              }
-            }
-          }
-        },
-        "responses" : {
-          "200" : {
-            "description" : "account has been updated successfully"
-          },
-          "400" : {
-            "description" : "modifying account has failed"
           }
         }
       },
