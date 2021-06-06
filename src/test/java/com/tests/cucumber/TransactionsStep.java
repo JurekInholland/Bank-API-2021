@@ -59,19 +59,12 @@ public class TransactionsStep {
     private String scheme = "http";
     private String port = "8080";
     private String host = "localhost";
-    private String basepath = "/api/login";
+    private String basepath = "/api/";
 
-    public ResponseEntity<String> getRequest(URI uri, Map<String, String> headers) throws URISyntaxException {
+    public ResponseEntity<String> getRequest(URI uri, HttpHeaders headers) throws URISyntaxException {
         // Set all headers
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", "application/json");
-
-        for (Map.Entry<String,String> header : headers.entrySet()) {
-            httpHeaders.add(header.getKey(), header.getValue());
-        }
-
-        // Request you are sending
-        HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         // Make HTTP request
         RestTemplate template = new RestTemplate();
@@ -171,6 +164,7 @@ public class TransactionsStep {
             .host(this.host)
             .port(this.port)
             .path(this.basepath)
+            .path("login")
             .build().toUri();
 
         // Build headers

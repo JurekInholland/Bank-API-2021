@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @CucumberOptions(
         plugin="pretty",
         tags="",
-        features = "src/test/resources/features/transactions.feature"
+        features = "src/test/resources/features/"
 )
 @SpringBootTest(classes = {
         Swagger2SpringBoot.class,
