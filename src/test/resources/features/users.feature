@@ -1,8 +1,6 @@
 Feature: Users
 
 
-  Scenario: User Login
-
   Scenario: Get Users (employee)
     Given the user logged in is an employee
     When visiting the user endpoint
